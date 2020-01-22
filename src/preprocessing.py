@@ -41,7 +41,7 @@ def deskew_images(input_path, output_path):
 
             best_score = max(scores)
             best_angle = angles[scores.index(best_score)]
-            print(f'Best angle: {best_angle} {name_img}')
+            print(f'Best angle: {best_angle} {file_name}')
 
             # correct skew
             data = interpolation.rotate(img, best_angle, reshape=False, order=0, mode='nearest')
