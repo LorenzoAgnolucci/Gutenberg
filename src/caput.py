@@ -71,6 +71,32 @@ def find_caput_connected_components(denoised_channel):
 
 
 def identify_caput_start(input_path, output_path, max_caput):
+    """
+    Key assumption when finding caputs: capitals are always left aligned, while caputs are always at the end of a line.
+    :param input_path:
+    :param output_path:
+    :param max_caput: maximum number of caputs to be considered
+    :return:
+    """
+    def is_caput_left_column_end_aligned(left, right):
+        """
+        :param left: left x-coordinate of caput bounding box
+        :param right: right x-coordinate of caput bounding box
+        :return: whether the caput is aligned at the right end of the left column
+        """
+        return 150 < left < 350 or 300 < right < 350
+
+    def is_caput_right_column_end_aligned(left, right):
+        """
+        :param left: left x-coordinate of caput bounding box
+        :param right: right x-coordinate of caput bounding box
+        :return: whether the caput is aligned at the right end of the left column
+        """
+        return 560 < left or 660 < right
+
+    def is_component_near_caput(capital_top, component_top):
+        return component_top - 70 < capital_top < component_top + 70
+
     caput_index = 1
 
     for file_name in sorted(os.listdir(input_path)):
@@ -88,15 +114,14 @@ def identify_caput_start(input_path, output_path, max_caput):
             top, left, bottom, right, _ = component
             cv2.rectangle(original_image, (left, top), (right, bottom), (0, 255, 0), 2)
 
+        # left paragraph
         for component in red_connected_components:
             top, left, bottom, right, _ = component
 
-            # left paragraph
-            if (
-                    150 < left < 350 or 300 < right < 350) and caput_index <= max_caput:  # check whether the connected compontents is alligned to the right of the paragraph (it means it's not a capital letter)
+            if is_caput_left_column_end_aligned(left, right) and caput_index <= max_caput:  # check whether the connected compontents is alligned to the right of the paragraph (it means it's not a capital letter)
                 for capital_component in red_connected_components + blue_connected_components:
                     cap_top, cap_left, cap_bottom, cap_right, _ = capital_component
-                    if top - 70 < cap_top < top + 70 and cap_left < 100:  # check if the connected component is not too distance from the capital letter
+                    if is_component_near_caput(cap_top, top) and cap_left < 100:  # check if the connected component is not too distance from the capital letter
                         cv2.putText(original_image, f"caput {caput_index}", (right + 5, bottom + 20),
                                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (140, 97, 140), 2)
                         caput_index += 1
@@ -105,10 +130,11 @@ def identify_caput_start(input_path, output_path, max_caput):
         # right paragraph
         for component in red_connected_components:
             top, left, bottom, right, _ = component
-            if (560 < left or 660 < right) and caput_index <= max_caput:
+
+            if is_caput_right_column_end_aligned(left, right) and caput_index <= max_caput:
                 for capital_component in red_connected_components + blue_connected_components:
                     cap_top, cap_left, cap_bottom, cap_right, _ = capital_component
-                    if top - 70 < cap_top < top + 70 and 300 < cap_left < 510:
+                    if is_component_near_caput(cap_top, top) and 300 < cap_left < 510:
                         cv2.putText(original_image, f"caput {caput_index}", (left, bottom + 30),
                                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (140, 97, 140), 2)
                         caput_index += 1
