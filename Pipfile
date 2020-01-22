@@ -8,7 +8,6 @@ verify_ssl = true
 [packages]
 numpy = "~=1.18"
 opencv-python = "~=4.1"
-pil = "*"
 pillow = "*"
 scipy = "*"
 matplotlib = "*"
