@@ -60,5 +60,6 @@ def main():
     deskew_images("../dataset/original/exodus", "../dataset/deskewed/exodus")
     crop_images("../dataset/deskewed/exodus", "../dataset/deskewed/exodus")
 
+
 if __name__ == '__main__':
     main()
