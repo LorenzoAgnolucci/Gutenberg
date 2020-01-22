@@ -1,9 +1,9 @@
 import os
+
 import cv2
-from PIL import Image as im
 import numpy as np
+from PIL import Image as im
 from scipy.ndimage import interpolation
-import matplotlib.pyplot as plt
 
 
 def crop_images(input_path, output_path):
