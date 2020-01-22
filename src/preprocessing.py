@@ -62,7 +62,7 @@ def main():
     output_path = pathlib.Path("../dataset/deskewed/exodus")
 
     if not input_path.exists():
-        raise FileNotFoundError(f"Dataset not found. Please put dataset in {input_path.absolute()}")
+        raise FileNotFoundError(f"Dataset not found. Please put dataset in {input_path.resolve()}")
 
     output_path.mkdir(parents=True, exist_ok=True)
 
