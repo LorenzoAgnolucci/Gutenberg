@@ -57,14 +57,14 @@ def find_caput_connected_components(denoised_channel):
 
         area = (bottom - top) * (right - left)
 
-        if area >= 100:
+        if area >= 200:
             caput_connected_components.append((top, left, bottom, right, area))
 
     return caput_connected_components
 
 
-def main():
-    input_path = "../dataset/deskewed/exodus"
+def identify_caput_start(input_path, output_path, max_caput):
+    caput_index = 1
 
     for file_name in sorted(os.listdir(input_path)):
         red_ch, blue_ch = find_caput_pixels(os.path.join(input_path, file_name))
@@ -81,9 +81,45 @@ def main():
             top, left, bottom, right, _ = component
             cv2.rectangle(original_image, (left, top), (right, bottom), (0, 255, 0), 2)
 
-        cv2.imshow(f"{file_name} with CCs", original_image)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        for component in red_connected_components:
+            top, left, bottom, right, _ = component
+
+            # left paragraph
+            if (
+                    150 < left < 350 or 300 < right < 350) and caput_index <= max_caput:  # check whether the connected compontents is alligned to the right of the paragraph (it means it's not a capital letter)
+                for capital_component in red_connected_components + blue_connected_components:
+                    cap_top, cap_left, cap_bottom, cap_right, _ = capital_component
+                    if top - 70 < cap_top < top + 70 and cap_left < 100:  # check if the connected component is not too distance from the capital letter
+                        cv2.putText(original_image, f"caput {caput_index}", (right + 5, bottom + 20),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (140, 97, 140), 2)
+                        caput_index += 1
+                        break
+
+        # right paragraph
+        for component in red_connected_components:
+            top, left, bottom, right, _ = component
+            if (560 < left or 660 < right) and caput_index <= max_caput:
+                for capital_component in red_connected_components + blue_connected_components:
+                    cap_top, cap_left, cap_bottom, cap_right, _ = capital_component
+                    if top - 70 < cap_top < top + 70 and 300 < cap_left < 510:
+                        cv2.putText(original_image, f"caput {caput_index}", (left, bottom + 30),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (140, 97, 140), 2)
+                        caput_index += 1
+                        break
+
+        cv2.imwrite(os.path.join(output_path, f"{file_name}"), original_image)
+        # cv2.imshow(f"{file_name} with CCs", original_image)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+
+
+def main():
+    input_path = "../dataset/deskewed/exodus"
+    output_path = "../dataset/deskewed/caput_exodus"
+
+    max_caput = 40
+
+    identify_caput_start(input_path,output_path, max_caput)
 
 
 if __name__ == '__main__':
