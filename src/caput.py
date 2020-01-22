@@ -72,7 +72,9 @@ def find_caput_connected_components(denoised_channel):
 
 def identify_caput_start(input_path, output_path, max_caput):
     """
-    Key assumption when finding caputs: capitals are always left aligned, while caputs are always at the end of a line.
+    Key assumptions when finding caputs:
+     * capitals are always left aligned, while caputs are always at the end of a line.
+     * capitals and caputs are always on the same page
     :param input_path:
     :param output_path:
     :param max_caput: maximum number of caputs to be considered
