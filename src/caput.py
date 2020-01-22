@@ -30,11 +30,18 @@ def find_caput_pixels(page_image_path):
 
 
 def morphological_denoise(channel):
+    """
+    This functions removes noise (e.g. red embellishments in blue caputs) from single-channel images through
+    morphological transformations. To do so two passes of morphological closure are executed, first with a
+    vertical structuring element to remove vertical embellishments, then with a standard square structuring element
+    to make separated connected components of the same caput come together
+    :param channel: single-channel image where the only non-caput coloured pixels are noise
+    :return: input channel with most noise removed and where bounding boxes of the caputs' pixels are kept the same
+    """
     kernel = np.ones((3, 3))
 
     noise_removal_kernel = np.ones((2, 1))
 
-    # remove vertical noise near the capital letter
     channel = cv2.erode(channel, noise_removal_kernel, iterations=1)
     channel = cv2.dilate(channel, noise_removal_kernel, iterations=1)
 
