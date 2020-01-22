@@ -26,6 +26,17 @@ def find_caput_pixels(page_image_path):
     return red_binarized_channel, blue_binarized_channel
 
 
+def morphological_denoise(channel):
+    kernel = np.ones((3, 3))
+
+    noise_removal_kernel = np.ones((2, 1))
+
+    channel = cv2.erode(channel, noise_removal_kernel, iterations=1)
+    channel = cv2.dilate(channel, noise_removal_kernel, iterations=1)
+    channel = cv2.dilate(channel, kernel, iterations=20)
+    channel = cv2.erode(channel, kernel, iterations=20)
+
+    return channel
 
 
 def main():
@@ -33,6 +44,10 @@ def main():
 
     for file_name in sorted(os.listdir(input_path)):
         red_ch, blue_ch = find_caput_pixels(os.path.join(input_path, file_name))
+
+        red_ch = morphological_denoise(red_ch)
+        blue_ch = morphological_denoise(blue_ch)
+
         cv2.imshow(f"{file_name} blue", blue_ch)
         cv2.waitKey(0)
         cv2.imshow(f"{file_name} red", red_ch)
