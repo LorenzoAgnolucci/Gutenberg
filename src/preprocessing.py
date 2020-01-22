@@ -54,3 +54,11 @@ def find_score(arr, angle):
     hist = np.sum(data, axis=1)
     score = np.sum((hist[1:] - hist[:-1]) ** 2)
     return hist, score
+
+
+def main():
+    deskew_images("../dataset/original/exodus", "../dataset/deskewed/exodus")
+    crop_images("../dataset/deskewed/exodus", "../dataset/deskewed/exodus")
+
+if __name__ == '__main__':
+    main()
