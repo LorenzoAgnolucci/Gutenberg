@@ -11,6 +11,3 @@ opencv-python = "~=4.1"
 pillow = "*"
 scipy = "*"
 matplotlib = "*"
-
-[requires]
-python_version = "3"
