@@ -121,7 +121,7 @@ def identify_caput_start(input_path, output_path, max_caput):
 
 def main():
     input_path = "../dataset/deskewed/exodus"
-    output_path = "../dataset/deskewed/caput_exodus"
+    output_path = "../dataset/caputs/exodus"
 
     max_caput = 40
 
