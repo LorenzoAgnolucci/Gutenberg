@@ -20,8 +20,11 @@ def find_caput_pixels(page_image_path):
     red_channel = cv2.bitwise_and(img, img, mask=red_mask)
     blue_channel = cv2.bitwise_and(img, img, mask=blue_mask)
 
+    red_channel = cv2.cvtColor(cv2.cvtColor(red_channel, cv2.COLOR_HSV2BGR), cv2.COLOR_BGR2GRAY)
+    blue_channel = cv2.cvtColor(cv2.cvtColor(blue_channel, cv2.COLOR_HSV2BGR), cv2.COLOR_BGR2GRAY)
+
     _, red_binarized_channel = cv2.threshold(red_channel, 127, 255, cv2.THRESH_BINARY)
-    _, blue_binarized_channel = cv2.threshold(blue_channel, 127, 255, cv2.THRESH_BINARY)
+    _, blue_binarized_channel = cv2.threshold(blue_channel, 30, 255, cv2.THRESH_BINARY)
 
     return red_binarized_channel, blue_binarized_channel
 
@@ -39,6 +42,24 @@ def morphological_denoise(channel):
     return channel
 
 
+def find_caput_connected_components(denoised_channel):
+    num_components, labels, stats, _ = cv2.connectedComponentsWithStats(denoised_channel, connectivity=8)
+    caput_connected_components = []
+
+    for label in range(1, num_components):
+        top = stats[label, cv2.CC_STAT_TOP]
+        bottom = top + stats[label, cv2.CC_STAT_HEIGHT]
+        left = stats[label, cv2.CC_STAT_LEFT]
+        right = left + stats[label, cv2.CC_STAT_WIDTH]
+
+        area = (bottom - top) * (right - left)
+
+        if area >= 100:
+            caput_connected_components.append((top, left, bottom, right, area))
+
+    return caput_connected_components
+
+
 def main():
     input_path = "../dataset/deskewed/exodus"
 
@@ -48,9 +69,16 @@ def main():
         red_ch = morphological_denoise(red_ch)
         blue_ch = morphological_denoise(blue_ch)
 
-        cv2.imshow(f"{file_name} blue", blue_ch)
-        cv2.waitKey(0)
-        cv2.imshow(f"{file_name} red", red_ch)
+        red_connected_components = find_caput_connected_components(red_ch)
+        blue_connected_components = find_caput_connected_components(blue_ch)
+
+        original_image = cv2.imread(os.path.join(input_path, file_name))
+
+        for component in (red_connected_components + blue_connected_components):
+            top, left, bottom, right, _ = component
+            cv2.rectangle(original_image, (left, top), (right, bottom), (0, 255, 0), 2)
+
+        cv2.imshow(f"{file_name} with CCs", original_image)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
