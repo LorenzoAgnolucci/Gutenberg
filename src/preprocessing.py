@@ -1,4 +1,5 @@
 import os
+import pathlib
 
 import cv2
 import numpy as np
@@ -57,8 +58,16 @@ def find_score(arr, angle):
 
 
 def main():
-    deskew_images("../dataset/original/exodus", "../dataset/deskewed/exodus")
-    crop_images("../dataset/deskewed/exodus", "../dataset/deskewed/exodus")
+    input_path = pathlib.Path("../dataset/original/exodus")
+    output_path = pathlib.Path("../dataset/deskewed/exodus")
+
+    if not input_path.exists():
+        raise FileNotFoundError(f"Dataset not found. Please put dataset in {input_path.absolute()}")
+
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    deskew_images(input_path, output_path)
+    crop_images(output_path, output_path)
 
 
 if __name__ == '__main__':

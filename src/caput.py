@@ -1,4 +1,5 @@
 import os
+import pathlib
 
 import cv2
 import numpy as np
@@ -120,8 +121,13 @@ def identify_caput_start(input_path, output_path, max_caput):
 
 
 def main():
-    input_path = "../dataset/deskewed/exodus"
-    output_path = "../dataset/caputs/exodus"
+    input_path = pathlib.Path("../dataset/deskewed/exodus")
+    output_path = pathlib.Path("../dataset/caputs/exodus")
+
+    if not input_path.exists():
+        raise FileNotFoundError("Deskewed dataset not found. Please run `preprocessing.py` first")
+
+    output_path.mkdir(parents=True, exist_ok=True)
 
     max_caput = 40
 
