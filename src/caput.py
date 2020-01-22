@@ -34,8 +34,11 @@ def morphological_denoise(channel):
 
     noise_removal_kernel = np.ones((2, 1))
 
+    #remove vertical noise near the capital letter
     channel = cv2.erode(channel, noise_removal_kernel, iterations=1)
     channel = cv2.dilate(channel, noise_removal_kernel, iterations=1)
+
+
     channel = cv2.dilate(channel, kernel, iterations=20)
     channel = cv2.erode(channel, kernel, iterations=20)
 
