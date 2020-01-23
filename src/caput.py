@@ -80,6 +80,7 @@ def identify_caput_start(input_path, output_path, max_caput):
     :param max_caput: maximum number of caputs to be considered
     :return:
     """
+
     def is_caput_left_column_end_aligned(left, right):
         """
         :param left: left x-coordinate of caput bounding box
@@ -120,12 +121,14 @@ def identify_caput_start(input_path, output_path, max_caput):
         for component in red_connected_components:
             top, left, bottom, right, _ = component
 
-            if is_caput_left_column_end_aligned(left, right) and caput_index <= max_caput:  # check whether the connected compontents is alligned to the right of the paragraph (it means it's not a capital letter)
+            if is_caput_left_column_end_aligned(left,
+                                                right) and caput_index <= max_caput:  # check whether the connected compontents is alligned to the right of the paragraph (it means it's not a capital letter)
                 for capital_component in red_connected_components + blue_connected_components:
                     cap_top, cap_left, cap_bottom, cap_right, _ = capital_component
-                    if is_component_near_caput(cap_top, top) and cap_left < 100:  # check if the connected component is not too distance from the capital letter
+                    if is_component_near_caput(cap_top,
+                                               top) and cap_left < 100:  # check if the connected component is not too distance from the capital letter
                         cv2.putText(original_image, f"caput {caput_index}", (right + 5, bottom + 20),
-                                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (140, 97, 140), 2)
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (238, 0, 255), 2, cv2.LINE_AA)
                         caput_index += 1
                         break
 
@@ -138,7 +141,7 @@ def identify_caput_start(input_path, output_path, max_caput):
                     cap_top, cap_left, cap_bottom, cap_right, _ = capital_component
                     if is_component_near_caput(cap_top, top) and 300 < cap_left < 510:
                         cv2.putText(original_image, f"caput {caput_index}", (left, bottom + 30),
-                                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (140, 97, 140), 2)
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (238, 0, 255), 2, cv2.LINE_AA)
                         caput_index += 1
                         break
 
