@@ -15,7 +15,9 @@ def binarize_image(image_data):
 def detect_lines(input_path, output_path):
     COLUMN_HISTOGRAM_THRESHOLD = 15
     ROW_HISTOGRAM_THRESHOLD = 50
+    ROW_PROXIMITY_THRESHOLD = 10
     COLUMN_EXTRA_MARGIN = 14
+    ROW_MARGIN_OFFSET = 5
 
     for file_name in sorted(os.listdir(input_path)):
         print(f"detecting lines on image {file_name}")
@@ -61,8 +63,8 @@ def detect_lines(input_path, output_path):
         for row_indicator in rows_histograms:
             row_section_indicators = []
             for row, _ in enumerate(row_indicator[:-1]):
-                if abs(row_indicator[row] - row_indicator[row + 1]) == 1:
-                    row_section_indicators.append(row)
+                if (row_indicator[row] - row_indicator[row + 1]) == 1 and (not row_section_indicators or abs(row_section_indicators[-1] - row) > ROW_PROXIMITY_THRESHOLD):
+                    row_section_indicators.append(row + ROW_MARGIN_OFFSET)
 
             rows_indicators.append(row_section_indicators)
 
