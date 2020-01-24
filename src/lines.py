@@ -29,6 +29,20 @@ def detect_lines(input_path, output_path):
             if abs(columns_histogram[column] - columns_histogram[column + 1]) == 1:
                 columns_indicators.append(column)
 
+        """
+        Add an extra margin of COLUMN_EXTRA_MARGIN pixels to the right of the two biggest columns
+        """
+        column_widths = []
+        for column_index in range(len(columns_indicators[:-1])):
+            column_widths.append(abs(columns_indicators[column_index] - columns_indicators[column_index + 1]))
+
+        first, second = list(sorted(column_widths, reverse=True))[:2]
+        index_first = column_widths.index(first)
+        index_second = column_widths.index(second)
+        COLUMN_EXTRA_MARGIN = 14
+        columns_indicators[index_first + 1] += COLUMN_EXTRA_MARGIN
+        columns_indicators[index_second + 1] += COLUMN_EXTRA_MARGIN
+
         columns = []
         for (indicator, _) in enumerate(columns_indicators[:-1]):
             columns.append(binary_image[:, columns_indicators[indicator]:columns_indicators[indicator + 1]])
