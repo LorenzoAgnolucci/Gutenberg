@@ -16,6 +16,7 @@ def detect_lines(input_path, output_path):
     COLUMN_HISTOGRAM_THRESHOLD = 15
     ROW_HISTOGRAM_THRESHOLD = 50
     ROW_PROXIMITY_THRESHOLD = 10
+    FIRST_ROW_SEPARATION_OFFSET = 27
     COLUMN_EXTRA_MARGIN = 14
     ROW_MARGIN_OFFSET = 5
 
@@ -65,6 +66,9 @@ def detect_lines(input_path, output_path):
             for row, _ in enumerate(row_indicator[:-1]):
                 if (row_indicator[row] - row_indicator[row + 1]) == 1 and (not row_section_indicators or abs(row_section_indicators[-1] - row) > ROW_PROXIMITY_THRESHOLD):
                     row_section_indicators.append(row + ROW_MARGIN_OFFSET)
+
+            if row_section_indicators:
+                row_section_indicators.insert(0, row_section_indicators[0] - FIRST_ROW_SEPARATION_OFFSET)
 
             rows_indicators.append(row_section_indicators)
 
