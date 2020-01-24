@@ -13,6 +13,9 @@ def binarize_image(image_data):
 
 
 def detect_lines(input_path, output_path):
+    COLUMN_HISTOGRAM_THRESHOLD = 15
+    ROW_HISTOGRAM_THRESHOLD = 50
+
     for file_name in sorted(os.listdir(input_path)):
         print(f"detecting lines on image {file_name}")
 
@@ -22,7 +25,7 @@ def detect_lines(input_path, output_path):
         binary_image = binarize_image(image)
 
         columns_histogram = cv2.reduce(binary_image, 0, cv2.REDUCE_AVG).reshape(-1)
-        columns_histogram = np.array([1 if x > 15 else 0 for x in columns_histogram])
+        columns_histogram = np.array([1 if x > COLUMN_HISTOGRAM_THRESHOLD else 0 for x in columns_histogram])
 
         columns_indicators = []
         for column, _ in enumerate(columns_histogram[:-1]):
@@ -50,7 +53,7 @@ def detect_lines(input_path, output_path):
         rows_histograms = np.zeros((1, height))
         for column in columns:
             rows_histogram_column = cv2.reduce(column, 1, cv2.REDUCE_AVG)
-            rows_histogram_column = np.array([1 if x > 48 else 0 for x in rows_histogram_column]).reshape((1, -1))
+            rows_histogram_column = np.array([1 if x > ROW_HISTOGRAM_THRESHOLD else 0 for x in rows_histogram_column]).reshape((1, -1))
             rows_histograms = np.append(rows_histograms, rows_histogram_column, axis=0)
         rows_histograms = np.delete(rows_histograms, [0], axis=0)
 
