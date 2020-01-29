@@ -31,7 +31,7 @@ def main():
     output_path = pathlib.Path("../dataset/segmentation/genesis/")
 
     for image in sorted(os.listdir(image_path)):
-        calimero(os.path.join(image_path, image), output_path)
+        delete_punctuation(os.path.join(image_path, image), output_path)
 
 
 if __name__ == '__main__':
