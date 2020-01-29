@@ -65,7 +65,8 @@ def find_middle_periods_in_line(page_image, line_left, line_top, line_right, lin
         right = left + stats[label, cv2.CC_STAT_WIDTH]
 
         area = (bottom - top) * (right - left)
-        middle_period_columns_histogram = cv2.reduce(line_image[:, left:right], 0, cv2.REDUCE_SUM, dtype=cv2.CV_32F).reshape(
+        middle_period_columns_histogram = cv2.reduce(line_image[:, left:right], 0, cv2.REDUCE_SUM,
+                                                     dtype=cv2.CV_32F).reshape(
             -1) / 255
         middle_period_black_pixels = stats[label, cv2.CC_STAT_AREA]
 
@@ -87,6 +88,10 @@ def find_colons_in_line(page_image, line_left, line_top, line_right, line_bottom
     COLON_BOTTOM_BOUNDINGBOX_UPPER_BOUND = 23
     COLON_TOP_BOUNDINGBOX_LOWER_BOUND = 14
     BLACK_PIXELS_COLON_HISTOGRAM_THRESHOLD = 8
+    COLON_OFFSET_LEFT_MARGIN = 3
+    COLON_OFFSET_RIGHT_MARGIN = 3
+    COLON_OFFSET_AREA_MARGIN = 10
+    COLON_UPPER_TOP_THRESHOLD = 3
 
     colons_in_line = []
 
@@ -112,9 +117,21 @@ def find_colons_in_line(page_image, line_left, line_top, line_right, line_bottom
             if COLON_BOTTOM_BOUNDINGBOX_LOWER_BOUND < bottom < COLON_BOTTOM_BOUNDINGBOX_UPPER_BOUND \
                     and top > COLON_TOP_BOUNDINGBOX_LOWER_BOUND \
                     and columns_black_pixels_sum > BLACK_PIXELS_COLON_HISTOGRAM_THRESHOLD:
-                x, y, width, height = cv2.boundingRect(line_image[:, left:right])
 
-                colons_in_line.append((line_left + left, line_top + y, line_left + left + width, line_top + y + height))
+                for upper_label in range(1, num_components):
+                    upper_top = stats[upper_label, cv2.CC_STAT_TOP]
+                    upper_bottom = upper_top + stats[upper_label, cv2.CC_STAT_HEIGHT]
+                    upper_left = stats[upper_label, cv2.CC_STAT_LEFT]
+                    upper_right = upper_left + stats[upper_label, cv2.CC_STAT_WIDTH]
+
+                    upper_area = (upper_bottom - upper_top) * (upper_right - upper_left)
+
+                    if label != upper_label and left - COLON_OFFSET_LEFT_MARGIN < upper_left < left + COLON_OFFSET_LEFT_MARGIN and right - COLON_OFFSET_RIGHT_MARGIN < upper_right < right + COLON_OFFSET_RIGHT_MARGIN \
+                            and area - COLON_OFFSET_AREA_MARGIN < upper_area < area + COLON_OFFSET_AREA_MARGIN and upper_top > COLON_UPPER_TOP_THRESHOLD:
+                        x, y, width, height = cv2.boundingRect(line_image[:, left:right])
+
+                        colons_in_line.append(
+                            (line_left + left, line_top + y, line_left + left + width, line_top + y + height))
 
     return colons_in_line
 
@@ -145,7 +162,8 @@ def find_long_accents_in_line(page_image, line_left, line_top, line_right, line_
         right = left + stats[label, cv2.CC_STAT_WIDTH]
 
         area = (bottom - top) * (right - left)
-        long_accent_columns_histogram = cv2.reduce(line_image[:, left:right], 0, cv2.REDUCE_SUM, dtype=cv2.CV_32F).reshape(
+        long_accent_columns_histogram = cv2.reduce(line_image[:, left:right], 0, cv2.REDUCE_SUM,
+                                                   dtype=cv2.CV_32F).reshape(
             -1) / 255
         long_accent_black_pixels = stats[label, cv2.CC_STAT_AREA]
 
@@ -160,7 +178,6 @@ def find_long_accents_in_line(page_image, line_left, line_top, line_right, line_
                     and accent_bounding_box_density > LONG_ACCENT_DENSITY_THRESHOLD:
                 long_accents_in_line.append((line_left + left, line_top + top, line_left + right, line_top + bottom))
 
-    # cv2.imwrite(output_path_image, page_image)
     return long_accents_in_line
 
 
@@ -270,8 +287,11 @@ def draw_punctuation(image_path, output_path):
 
 
 def main():
-    image_path = "../dataset/deskewed/genesis/025.png"
+    image_path = "../dataset/deskewed/genesis"
     output_path = pathlib.Path("../dataset/punctuation/genesis/")
+
+    for image in sorted(os.listdir(image_path)):
+        draw_punctuation(os.path.join(image_path, image), output_path)
 
     draw_punctuation(image_path, output_path)
 
