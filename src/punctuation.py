@@ -197,20 +197,22 @@ def find_dots_over_i_in_line(page_image, line_left, line_top, line_right, line_b
         right = left + stats[label, cv2.CC_STAT_WIDTH]
 
         area = (bottom - top) * (right - left)
-        period_columns_histogram = cv2.reduce(line_image[:, left:right], 0, cv2.REDUCE_SUM, dtype=cv2.CV_32F).reshape(-1) / 255
-        accent_black_pixels = stats[label, cv2.CC_STAT_AREA]
+        dot_columns_histogram = cv2.reduce(line_image[:, left:right], 0, cv2.REDUCE_SUM, dtype=cv2.CV_32F).reshape(-1) / 255
+        dot_black_pixels = stats[label, cv2.CC_STAT_AREA]
+        dot_bounding_box_density = dot_black_pixels / area
 
-        columns_black_pixels_sum = sum(period_columns_histogram) - accent_black_pixels
+        columns_black_pixels_sum = sum(dot_columns_histogram) - dot_black_pixels
 
         if DOT_AREA_LOWER_BOUND < area < DOT_AREA_UPPER_BOUND:
             if DOT_BOTTOM_BOUNDINGBOX_LOWER_BOUND < bottom < DOT_BOTTOM_BOUNDINGBOX_UPPER_BOUND \
                     and DOT_TOP_BOUNDINGBOX_LOWER_BOUND < top < DOT_TOP_BOUNDINGBOX_UPPER_BOUND \
                     and DOT_WIDTH_BOUNDINGBOX_LOWER_BOUND < right - left < DOT_WIDTH_BOUNDINGBOX_UPPER_BOUND \
-                    and columns_black_pixels_sum > BLACK_PIXELS_DOT_HISTOGRAM_THRESHOLD:
-
+                    and columns_black_pixels_sum > BLACK_PIXELS_DOT_HISTOGRAM_THRESHOLD \
+                    and dot_bounding_box_density < DOT_DENSITY_UPPER_BOUND:
+                print(f"dot_bounding_box_density{dot_bounding_box_density}")
                 cv2.rectangle(page_image,
-                              (line_left + left-1, line_top + top-1),
-                              (line_left + right+1, line_top + bottom+1),
+                              (line_left + left, line_top + top),
+                              (line_left + right, line_top + bottom),
                               (255, 0, 0),
                               1)
 
