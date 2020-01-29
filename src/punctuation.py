@@ -169,15 +169,16 @@ def find_long_accents_in_line(page_image, line_left, line_top, line_right, line_
     cv2.imwrite(output_path_image, page_image)
 
 def find_dots_over_i_in_line(page_image, line_left, line_top, line_right, line_bottom, output_path_image):
-    DOT_AREA_LOWER_BOUND = 10
-    DOT_AREA_UPPER_BOUND = 30
+    DOT_AREA_LOWER_BOUND = 5
+    DOT_AREA_UPPER_BOUND = 35
     DOT_BOTTOM_BOUNDINGBOX_LOWER_BOUND = 0
-    DOT_BOTTOM_BOUNDINGBOX_UPPER_BOUND = 29
+    DOT_BOTTOM_BOUNDINGBOX_UPPER_BOUND = 10
     DOT_TOP_BOUNDINGBOX_LOWER_BOUND = -1
-    DOT_TOP_BOUNDINGBOX_UPPER_BOUND = 7
+    DOT_TOP_BOUNDINGBOX_UPPER_BOUND = 6
     BLACK_PIXELS_DOT_HISTOGRAM_THRESHOLD = 15
-    DOT_WIDTH_BOUNDINGBOX_LOWER_BOUND = 6
-    DOT_WIDTH_BOUNDINGBOX_UPPER_BOUND = 15
+    DOT_WIDTH_BOUNDINGBOX_LOWER_BOUND = 0
+    DOT_WIDTH_BOUNDINGBOX_UPPER_BOUND = 7
+    DOT_DENSITY_UPPER_BOUND = 0.71
 
 
     binary_image = binarize_image(page_image)
