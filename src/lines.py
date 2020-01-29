@@ -73,7 +73,9 @@ def detect_lines(image_path):
 
         rows_indicators.append(row_section_indicators)
 
-    columns_indicators = list(zip(columns_indicators, columns_indicators[1:]))
+    columns_indicators = [(columns_indicators[first_left], columns_indicators[first_right]),
+                          (columns_indicators[second_left], columns_indicators[second_right])]
+    rows_indicators = [rows_indicators[first_left], rows_indicators[second_left]]
     return columns_indicators, rows_indicators
 
 
