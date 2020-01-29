@@ -2,6 +2,7 @@ import os
 import pathlib
 
 import cv2
+import numpy as np
 
 from lines import binarize_image, detect_lines
 
@@ -180,6 +181,10 @@ def find_dots_over_i_in_line(page_image, line_left, line_top, line_right, line_b
 
 
     binary_image = binarize_image(page_image)
+    dots_enhancement_kernel = np.ones((1, 2))
+
+    binary_image = cv2.dilate(binary_image, dots_enhancement_kernel, iterations=1)
+    binary_image = cv2.erode(binary_image, dots_enhancement_kernel, iterations=1)
     line_image = binary_image[line_top:line_bottom, line_left:line_right]
 
     num_components, labels, stats, _ = cv2.connectedComponentsWithStats(line_image, connectivity=8)
