@@ -281,7 +281,7 @@ def draw_punctuation(image_path, output_path):
 
 def main():
     image_path = "../dataset/deskewed/genesis/037.png"
-    output_path = pathlib.Path("../dataset/periods/genesis/")
+    output_path = pathlib.Path("../dataset/punctuation/genesis/")
 
     draw_punctuation(image_path, output_path)
 
