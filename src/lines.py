@@ -19,6 +19,7 @@ def detect_lines(image_path):
     FIRST_ROW_SEPARATION_OFFSET = 25
     COLUMN_EXTRA_MARGIN = 14
     ROW_MARGIN_OFFSET = 5
+    LINES_IN_PAGE = 42
 
     print(f"detecting lines on image {image_path}")
 
@@ -68,7 +69,9 @@ def detect_lines(image_path):
                     not row_section_indicators or abs(row_section_indicators[-1] - row) > ROW_PROXIMITY_THRESHOLD):
                 row_section_indicators.append(row + ROW_MARGIN_OFFSET)
 
-        if row_section_indicators:
+
+        if row_section_indicators:  # `row_section_indicators` may be empty in the case of white columns
+            row_section_indicators = row_section_indicators[-LINES_IN_PAGE:]
             row_section_indicators.insert(0, row_section_indicators[0] - FIRST_ROW_SEPARATION_OFFSET)
 
         rows_indicators.append(row_section_indicators)
