@@ -87,8 +87,8 @@ def draw_lines(columns_indicators, rows_indicators, image_path, output_path):
     height, width, _ = image.shape
 
     for column_index, (column_left, column_right) in enumerate(columns_indicators):
-        cv2.line(image, (column_left, 0), (column_left, height), (0, 255, 0), 3)
-        cv2.line(image, (column_right, 0), (column_right, height), (0, 255, 0), 3)
+        cv2.line(image, (column_left, 0), (column_left, height), (0, 255, 0), 1)
+        cv2.line(image, (column_right, 0), (column_right, height), (0, 255, 0), 1)
 
         for row_indicator in rows_indicators[column_index]:
             cv2.line(image,
