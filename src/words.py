@@ -1,8 +1,49 @@
 import operator
 import re
+import sys
+from collections import defaultdict
+from math import ceil
+
+from dtaidistance import dtw
+from dtaidistance import dtw_visualisation as dtwvis
 
 from lines import draw_lines
 from punctuation import *
+
+# D = 18
+# B = 17
+LETTER_LENGTH_MAPPING = {
+    'a': 11,
+    'b': 10,
+    'c': 7,
+    'd': 9,
+    'e': 7,
+    'f': 7,
+    'g': 13,
+    'h': 11,
+    'i': 5,
+    'l': 5,
+    'm': 19,
+    'n': 12,
+    'o': 11,
+    'p': 11,
+    'q': 10,
+    'r': 8,
+    's': 12,
+    't': 7,
+    'u': 11,
+    'v': 10,
+    'x': 9,
+    'y': 5,
+    'z': 11,
+    '.': 3
+}
+
+ALTERNATIVES_LENGTH_MAPPING = {
+    "et": 10,
+    "quod": 15,
+    'long_s': 9
+}
 
 
 def delete_punctuation(line_image, output_path):
@@ -21,6 +62,7 @@ def delete_punctuation(line_image, output_path):
                       0,
                       cv2.FILLED)
     return bin_image
+
 
 def calimero_pro_edition(bin_image, output_path, size_threshold=25):
     # output_path.mkdir(parents=True, exist_ok=True)
@@ -42,7 +84,7 @@ def segment_words_in_page(image_path, output_path, transcription_file):
         return f"_P{page_number}_C1\n(.*)_P{page_number + 1}_C0"
 
     image_data = cv2.imread(image_path)
-    binarized_image = binarize_image(image_data)
+    # binarized_image = binarize_image(image_data)
 
     columns_indicators, rows_indicators = detect_lines(image_path)
     page_number = int(os.path.splitext(os.path.basename(image_path))[0])
@@ -58,10 +100,11 @@ def segment_words_in_page(image_path, output_path, transcription_file):
 
         for row_index, (row_top, row_bottom) in enumerate(zip(rows_separators, rows_separators[1:])):
             row_text = column_text[row_index]
-            line_without_punctuation = delete_punctuation(image_data[row_top:row_bottom, column_left:column_right], None)
+            line_without_punctuation = delete_punctuation(image_data[row_top:row_bottom, column_left:column_right],
+                                                          None)
             calimered_binarized_image = calimero_pro_edition(
                 line_without_punctuation, None)
-            runs = segment_words(calimered_binarized_image, row_text)
+            runs = segment_words(calimered_binarized_image, row_text, page_number, column_index, row_index)
             column_runs.append(runs)
 
         page_runs.append(column_runs)
@@ -69,60 +112,80 @@ def segment_words_in_page(image_path, output_path, transcription_file):
     return columns_indicators, rows_indicators, page_runs
 
 
-def rlsa(histogram):
-    runs = []
-    count = 0
-    for index, value in enumerate(histogram):
-        if value == 0:
-            count += 1
-        elif value != 0 and count > 0:
-            runs.append((index - count, index, count))
-            count = 0
+def expected_word_lengths_for_line(line_text):
+    words = line_text.lower().strip("\n =").split(" ")
+    expected_length_words = []
+
+    for word in words:
+        expected_length_words.append(sum([LETTER_LENGTH_MAPPING[x] for x in word]))
+
+    return expected_length_words
+
+
+def expected_runs_for_line(line_lengths):
+    runs = [3]
+    for run_length in line_lengths:
+        runs += [0] * (run_length + 1)
+        runs += [3]
+        runs += [0]
+
     return runs
 
 
-def segment_words(line_image, line_text):
-    words = line_text.strip().split(" ")
-    num_words = len(words)
+def filter_cuts(observed_runs, expected_runs, page, row, col):
+    path = dtw.warping_path(expected_runs, observed_runs)
+
+    cuts = []
+    for i, j in path:
+        if expected_runs[i] > 0:
+            cuts.append(j)
+
+    return cuts
+
+
+def collapse_histogram(histogram):
+    new_histogram = []
+    start_count = 0
+    i = 0
+    while histogram[i] == 1:
+        start_count += 1
+        new_histogram.append(0)
+        i += 1
+
+    if new_histogram:
+        new_histogram[0] = start_count
+
+    count = 0
+    for index, value in enumerate(histogram[start_count:]):
+        if value == 0:
+            if count != 0:
+                new_histogram[-ceil(count / 2)] = count
+                count = 0
+            new_histogram.append(0)
+        elif value != 0:
+            count += 1
+            new_histogram.append(0)
+
+    if histogram[-1] == 1:
+        new_histogram[-count + 1] = count
+
+    return new_histogram
+
+
+def segment_words(line_image, line_text, page, col, row):
     line_histogram = cv2.reduce(line_image, 0, cv2.REDUCE_SUM, dtype=cv2.CV_32F).reshape(-1) / 255
-    line_histogram = [1 if x > 1 else 0 for x in line_histogram]
+    line_histogram = [0 if x > 0 else 1 for x in line_histogram]
+    expected_runs = expected_runs_for_line(expected_word_lengths_for_line(line_text))
 
-    runs = rlsa(line_histogram)
+    observed_runs = collapse_histogram(line_histogram)
 
-    for run in runs:
-        start, end, _ = run
-        if start == 0 or end >= len(line_histogram) - 1:
-            runs.remove(run)
+    expected_runs += [0] * (len(observed_runs) - len(expected_runs))
 
-    candidate_runs = sorted(runs, key=operator.itemgetter(2), reverse=True)[:num_words - 1]
-    worst_run_length = candidate_runs[-1]
-    ties = [run for run in runs if run[2] == worst_run_length]
-
-    if ties in candidate_runs:
-        ties = []
-
-    '''
-    if len(ties) > 1:
-        while len(candidate_runs) > num_words:
-            length_differences = []
-            for run in ties:
-                run_index = ties.index(run)
-                run_before = runs[run_index - 1]
-                run_after = runs[run_index + 1]
-                fused_word_run_length = run_after[1] - run_before[0] / len(line_histogram)
-                word_length = len(words[run_index - 1]) / len(line_text)
-                length_difference = abs(fused_word_run_length - word_length)
-                length_differences.append(length_difference)
-
-            min_index = length_differences.index(max(length_differences))
-            candidate_runs.remove(runs[min_index])
-    '''
-
-    return candidate_runs
+    cuts = filter_cuts(observed_runs, expected_runs, page, row, col)
+    return cuts
 
 
 def draw_word_separators_in_page(image_path, output_path, transcription_file):
-    image_data = cv2.imread(image_path)
     image_output_path = os.path.join(output_path, os.path.basename(image_path))
 
     columns_indicators, rows_indicators, page_runs = segment_words_in_page(image_path, None, transcription_file)
@@ -135,8 +198,8 @@ def draw_word_separators_in_page(image_path, output_path, transcription_file):
         for row_index, (row_top, row_bottom) in enumerate(zip(rows_separators, rows_separators[1:])):
             row_runs = page_runs[column_index][row_index]
 
-            for (start, end, count) in row_runs:
-                cv2.line(image_data, (column_left + end - 1, row_top), (column_left + end - 1, row_bottom), (0, 0, 255),
+            for end in row_runs:
+                cv2.line(image_data, (column_left + end, row_top), (column_left + end, row_bottom), (0, 0, 255),
                          1)
 
     cv2.imwrite(image_output_path, image_data)
@@ -147,7 +210,7 @@ def main():
     output_path = pathlib.Path("../dataset/segmentation/genesis/")
 
     with open("../dataset/genesis1-20.txt") as transcription_file:
-        for image in sorted(os.listdir(image_path))[1:20]:
+        for image in sorted(os.listdir(image_path)):
             image_input_path = os.path.join(image_path, image)
             image_output_path = os.path.join(output_path, image)
             # delete_punctuation(image_input_path, output_path)
