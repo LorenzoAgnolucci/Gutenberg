@@ -36,7 +36,8 @@ LETTER_LENGTH_MAPPING = {
     'x': 9,
     'y': 5,
     'z': 11,
-    '.': 3
+    '.': 3,
+    ':': 3
 }
 
 ALTERNATIVES_LENGTH_MAPPING = {
