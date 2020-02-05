@@ -43,7 +43,6 @@ LETTER_LENGTH_MAPPING = {
 ALTERNATIVES_LENGTH_MAPPING = {
     "et": 10,
     "quod": 15,
-    'long_s': 9
 }
 
 
