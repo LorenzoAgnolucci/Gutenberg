@@ -114,33 +114,43 @@ def segment_words_in_page(image_path, output_path, transcription_file):
 
 def expected_word_lengths_for_line(line_text):
     words = line_text.lower().strip("\n =").split(" ")
-    expected_length_words = []
+    expected_lengths_line = [[]]
 
     for word in words:
-        expected_length_words.append(sum([LETTER_LENGTH_MAPPING[x] for x in word]))
+        if word in ALTERNATIVES_LENGTH_MAPPING:
+            for line_length in expected_lengths_line[:]:
+                expected_lengths_line.append(line_length + [sum([LETTER_LENGTH_MAPPING[x] for x in word])])
+                line_length.append(ALTERNATIVES_LENGTH_MAPPING[word])
+        else:
+            for line_length in expected_lengths_line:
+                line_length.append(sum([LETTER_LENGTH_MAPPING[x] for x in word]))
 
-    return expected_length_words
+    return expected_lengths_line
 
 
-def expected_runs_for_line(line_lengths):
-    runs = [3]
-    for run_length in line_lengths:
-        runs += [0] * (run_length + 1)
-        runs += [3]
-        runs += [0]
+def expected_runs_for_line(line_length_combinations):
+    runs_combinations = []
+    for line_length in line_length_combinations:
+        runs = [3]
+        for run_length in line_length:
+            runs += [0] * (run_length + 1)
+            runs += [3]
+            runs += [0]
+        runs_combinations.append(runs)
 
-    return runs
+    return runs_combinations
 
 
 def filter_cuts(observed_runs, expected_runs, page, row, col):
     path = dtw.warping_path(expected_runs, observed_runs)
+    distance = dtw.distance(expected_runs, observed_runs)
 
     cuts = []
     for i, j in path:
         if expected_runs[i] > 0:
             cuts.append(j)
 
-    return cuts
+    return cuts, distance
 
 
 def collapse_histogram(histogram):
@@ -175,14 +185,18 @@ def collapse_histogram(histogram):
 def segment_words(line_image, line_text, page, col, row):
     line_histogram = cv2.reduce(line_image, 0, cv2.REDUCE_SUM, dtype=cv2.CV_32F).reshape(-1) / 255
     line_histogram = [0 if x > 0 else 1 for x in line_histogram]
-    expected_runs = expected_runs_for_line(expected_word_lengths_for_line(line_text))
+    expected_runs_combinations = expected_runs_for_line(expected_word_lengths_for_line(line_text))
 
     observed_runs = collapse_histogram(line_histogram)
 
-    expected_runs += [0] * (len(observed_runs) - len(expected_runs))
+    cuts_combinations = []
 
-    cuts = filter_cuts(observed_runs, expected_runs, page, row, col)
-    return cuts
+    for expected_runs in expected_runs_combinations:
+        expected_runs += [0] * (len(observed_runs) - len(expected_runs))
+        cuts_combinations.append(filter_cuts(observed_runs, expected_runs, page, row, col))
+
+    best_cuts, best_distance = min(cuts_combinations, key=operator.itemgetter(1))
+    return best_cuts
 
 
 def draw_word_separators_in_page(image_path, output_path, transcription_file):
