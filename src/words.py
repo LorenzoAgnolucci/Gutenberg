@@ -204,7 +204,7 @@ def draw_word_separators_in_page(image_path, output_path, transcription_file):
 
     columns_indicators, rows_indicators, page_runs = segment_words_in_page(image_path, None, transcription_file)
     draw_lines(columns_indicators, rows_indicators, image_path, output_path)
-    image_data = cv2.imread(image_path)
+    image_data = cv2.imread(image_output_path)
 
     for column_index, (column_left, column_right) in enumerate(columns_indicators):
         rows_separators = rows_indicators[column_index]
