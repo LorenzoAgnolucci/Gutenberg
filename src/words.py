@@ -1,12 +1,8 @@
 import operator
 import re
-import sys
-from collections import defaultdict
 from math import ceil
 
 from dtaidistance import dtw
-from dtaidistance import dtw_visualisation as dtwvis
-
 from lines import draw_lines
 from punctuation import *
 
