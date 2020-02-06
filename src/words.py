@@ -136,16 +136,27 @@ def expected_runs_for_line(line_length_combinations):
     return runs_combinations
 
 
-def filter_cuts(observed_runs, expected_runs, page, row, col):
-    path = dtw.warping_path(expected_runs, observed_runs)
-    distance = dtw.distance(expected_runs, observed_runs)
+def filter_cuts(shifted_observed_runs, expected_runs):
+
+    path = dtw.warping_path(expected_runs, shifted_observed_runs)
+    distance = dtw.distance(expected_runs, shifted_observed_runs)
+
+    runs_indices = [i for i, x in enumerate(shifted_observed_runs) if x > 0]
+    runs_indices.insert(0, 0)
 
     cuts = []
+    cuts_indices = []
     for i, j in path:
         if expected_runs[i] > 0:
-            cuts.append(j)
 
-    return cuts, distance
+            cuts.append(j)
+            index_found = j in runs_indices
+            if not index_found:
+                raise RuntimeError(f"DTW associated expected peak in {i} to zero value in {j}")
+
+            cuts_indices.append(runs_indices.index(j))
+
+    return cuts, cuts_indices, distance
 
 
 def collapse_histogram(histogram):
@@ -177,20 +188,77 @@ def collapse_histogram(histogram):
     return new_histogram
 
 
-def segment_words(line_image, line_text, page, col, row):
-    line_histogram = cv2.reduce(line_image, 0, cv2.REDUCE_SUM, dtype=cv2.CV_32F).reshape(-1) / 255
-    line_histogram = [0 if x > 0 else 1 for x in line_histogram]
+def compute_shifted_runs(long_accents_coords, observed_runs):
+    shifted_observed_runs = observed_runs.copy()
+    WORD_DISTANCE_THRESHOLD = 2  # check whether the following run is large enough, i.e. it's not between two letters
+    NUM_ZEROS_ADDED = 15
+    coordinates = []
+    for long_accent in long_accents_coords:
+        coordinates.append(long_accent[2])
+
+    global_offset = 0
+    for coordinate in coordinates:
+        local_offset = 0
+        while coordinate + local_offset < len(observed_runs) and observed_runs[coordinate + local_offset] == 0:
+            local_offset += 1
+        if coordinate + local_offset < len(observed_runs) and observed_runs[coordinate + local_offset] > WORD_DISTANCE_THRESHOLD:
+            shifted_observed_runs[coordinate + local_offset + global_offset: coordinate + local_offset + global_offset] \
+                = [0] * NUM_ZEROS_ADDED  # insert NUM_ZEROS_ADDED zeros in the sequence as single elements
+            global_offset += NUM_ZEROS_ADDED
+
+    return shifted_observed_runs
+
+
+def modify_runs_with_periods(periods_coords, observed_runs):
+    coordinates = []
+    for period_bounding_box in periods_coords:
+        coordinates.append((period_bounding_box[0] + period_bounding_box[2]) // 2)
+
+    for coordinate in coordinates:
+        found = False
+        offset = 0
+        while not found:
+            if observed_runs[coordinate + offset] != 0:
+                found = True
+            else:
+                if offset <= 0:
+                    offset = abs(offset) + 1  # poteva piovere
+                else:
+                    offset *= -1
+        observed_runs[coordinate + offset] *= 2
+    return observed_runs
+
+
+def segment_words(calimered_line_image, line_image, line_text, page, col, row):
+    COLUMN_HISTOGRAM_THRESHOLD = 2
+    height, width = calimered_line_image.shape[:2]
+    line_histogram = cv2.reduce(calimered_line_image, 0, cv2.REDUCE_SUM, dtype=cv2.CV_32F).reshape(-1) / 255
+    line_histogram = [0 if x > COLUMN_HISTOGRAM_THRESHOLD else 1 for x in line_histogram]
     expected_runs_combinations = expected_runs_for_line(expected_word_lengths_for_line(line_text))
 
     observed_runs = collapse_histogram(line_histogram)
 
+    long_accents_coords = find_long_accents_in_line(line_image, 0, 0, width, height)
+
+    periods_coords = find_middle_periods_in_line(line_image, 0, 0, width, height) + \
+                     find_periods_in_line(line_image, 0, 0, width, height) + \
+                     find_colons_in_line(line_image, 0, 0, width, height)
+
+    observed_runs = modify_runs_with_periods(periods_coords, observed_runs)
+
     cuts_combinations = []
+    observed_runs_shifted = compute_shifted_runs(long_accents_coords, observed_runs)
 
     for expected_runs in expected_runs_combinations:
         expected_runs += [0] * (len(observed_runs) - len(expected_runs))
-        cuts_combinations.append(filter_cuts(observed_runs, expected_runs, page, row, col))
+        cuts_combinations.append(filter_cuts(observed_runs_shifted, expected_runs))
 
-    best_cuts, best_distance = min(cuts_combinations, key=operator.itemgetter(1))
+    best_cuts, best_cuts_indices, best_distance = min(cuts_combinations, key=operator.itemgetter(2))
+
+    runs_indices = [i for i, x in enumerate(observed_runs) if x > 0]
+    runs_indices.insert(0, 0)
+    best_cuts = [runs_indices[i] for i in best_cuts_indices]
+
     return best_cuts
 
 
