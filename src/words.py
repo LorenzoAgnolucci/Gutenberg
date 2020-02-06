@@ -126,10 +126,10 @@ def expected_word_lengths_for_line(line_text):
 def expected_runs_for_line(line_length_combinations):
     runs_combinations = []
     for line_length in line_length_combinations:
-        runs = [3]
+        runs = [20]
         for run_length in line_length:
             runs += [0] * (run_length + 1)
-            runs += [3]
+            runs += [20]
             runs += [0]
         runs_combinations.append(runs)
 
@@ -158,13 +158,13 @@ def collapse_histogram(histogram):
         i += 1
 
     if new_histogram:
-        new_histogram[0] = start_count
+        new_histogram[0] = start_count * start_count
 
     count = 0
     for index, value in enumerate(histogram[start_count:]):
         if value == 0:
             if count != 0:
-                new_histogram[-ceil(count / 2)] = count
+                new_histogram[-ceil(count / 2)] = count * count
                 count = 0
             new_histogram.append(0)
         elif value != 0:
@@ -172,7 +172,7 @@ def collapse_histogram(histogram):
             new_histogram.append(0)
 
     if histogram[-1] == 1:
-        new_histogram[-count + 1] = count
+        new_histogram[-count + 1] = count * count
 
     return new_histogram
 
