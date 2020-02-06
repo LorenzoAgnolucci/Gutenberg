@@ -96,11 +96,10 @@ def segment_words_in_page(image_path, output_path, transcription_file):
 
         for row_index, (row_top, row_bottom) in enumerate(zip(rows_separators, rows_separators[1:])):
             row_text = column_text[row_index]
-            line_without_punctuation = delete_punctuation(image_data[row_top:row_bottom, column_left:column_right],
-                                                          None)
-            calimered_binarized_image = calimero_pro_edition(
-                line_without_punctuation, None)
-            runs = segment_words(calimered_binarized_image, row_text, page_number, column_index, row_index)
+            line_image = image_data[row_top:row_bottom, column_left:column_right]
+            line_without_punctuation = delete_punctuation(line_image, None)
+            calimered_binarized_image = calimero_pro_edition(line_without_punctuation, None)
+            runs = segment_words(calimered_binarized_image, line_image, row_text, page_number, column_index, row_index)
             column_runs.append(runs)
 
         page_runs.append(column_runs)
