@@ -6,8 +6,6 @@ from dtaidistance import dtw
 from lines import draw_lines
 from punctuation import *
 
-# D = 18
-# B = 17
 LETTER_LENGTH_MAPPING = {
     'a': 11,
     'b': 10,
@@ -69,7 +67,6 @@ def calimero_pro_edition(bin_image, output_path, size_threshold=25):
         if sizes[i] < size_threshold:
             bin_image[labels == i] = 0
 
-    # cv2.imwrite(os.path.join(output_path, os.path.basename(image_path)), page_image)
     return bin_image
 
 
@@ -80,7 +77,6 @@ def segment_words_in_page(image_path, output_path, transcription_file):
         return f"_P{page_number}_C1\n(.*)_P{page_number + 1}_C0"
 
     image_data = cv2.imread(image_path)
-    # binarized_image = binarize_image(image_data)
 
     columns_indicators, rows_indicators = detect_lines(image_path)
     page_number = int(os.path.splitext(os.path.basename(image_path))[0])
