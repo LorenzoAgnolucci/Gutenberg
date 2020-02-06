@@ -6,9 +6,11 @@ import numpy as np
 
 
 def binarize_image(image_data):
-    gray_image = cv2.cvtColor(image_data, cv2.COLOR_BGR2GRAY)
-    _, binary_image = cv2.threshold(gray_image, 127, 255, cv2.THRESH_BINARY_INV)
-
+    if len(image_data.shape) == 3:
+        gray_image = cv2.cvtColor(image_data, cv2.COLOR_BGR2GRAY)
+        _, binary_image = cv2.threshold(gray_image, 127, 255, cv2.THRESH_BINARY_INV)
+    else:
+        binary_image = image_data
     return binary_image
 
 
