@@ -168,7 +168,8 @@ def collapse_histogram(histogram):
         i += 1
 
     if new_histogram:
-        new_histogram[0] = start_count
+        new_histogram[start_count - 1] = start_count
+        new_histogram = new_histogram[start_count - 1:]
 
     count = 0
     for index, value in enumerate(histogram[start_count:]):
@@ -187,7 +188,7 @@ def collapse_histogram(histogram):
     while new_histogram[:][-1] == 0:
         del new_histogram[-1]
 
-    return new_histogram
+    return new_histogram, start_count - 1
 
 
 def compute_shifted_runs(long_accents_coords, observed_runs):
@@ -261,7 +262,7 @@ def segment_words(calimered_line_image, line_image, line_text, page, col, row):
     expected_runs_combinations = expected_runs_for_line(expected_word_lengths_for_line(line_text))
     expected_cuts = len(line_text.strip(" \n=").split(" ")) + 2
 
-    observed_runs = collapse_histogram(line_histogram)
+    observed_runs, shift_offset = collapse_histogram(line_histogram)
     noise_threshold = min(list(sorted([x for x in observed_runs if x != 0], reverse=True))[:expected_cuts])
     observed_runs = [x if x >= noise_threshold else 0 for x in observed_runs]
 
@@ -284,7 +285,7 @@ def segment_words(calimered_line_image, line_image, line_text, page, col, row):
 
     runs_indices = [i for i, x in enumerate(observed_runs) if x > 0]
     runs_indices.insert(0, 0)
-    best_cuts = [runs_indices[i] for i in best_cuts_indices]
+    best_cuts = [runs_indices[i] + shift_offset for i in best_cuts_indices]
 
     return best_cuts
 
