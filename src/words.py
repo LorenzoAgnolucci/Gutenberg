@@ -168,13 +168,13 @@ def collapse_histogram(histogram):
         i += 1
 
     if new_histogram:
-        new_histogram[0] = start_count * start_count
+        new_histogram[0] = start_count
 
     count = 0
     for index, value in enumerate(histogram[start_count:]):
         if value == 0:
             if count != 0:
-                new_histogram[-ceil(count / 2)] = count * count
+                new_histogram[-ceil(count / 2)] = count
                 count = 0
             new_histogram.append(0)
         elif value != 0:
@@ -182,7 +182,7 @@ def collapse_histogram(histogram):
             new_histogram.append(0)
 
     if histogram[-1] == 1:
-        new_histogram[-count + 1] = count * count
+        new_histogram[-count + 1] = count
 
     return new_histogram
 
