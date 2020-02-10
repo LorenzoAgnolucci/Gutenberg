@@ -1,6 +1,7 @@
 import operator
 import os
 import pathlib
+from typing import List, Tuple
 
 import cv2
 import numpy as np
@@ -15,7 +16,16 @@ def binarize_image(image_data):
     return binary_image
 
 
-def detect_lines(image_path):
+def detect_lines(image_path) -> Tuple[List[Tuple[int, int]], List[List[int]]]:
+    """
+    Detect text lines on a page image
+    :param image_path: path to image where to detect lines
+    :return: a tuple `(column_indicators, rows_indicators)` where:
+     * `column_indicators` (list) contains x-axis boundary coordinates of the two biggest columns
+     * `row_indicators` (list of lists) contains a list of y-axis lists of coordinates (one list for each column)
+     Such that for each column `col`, `column_indicators[col] == (left, right)`
+     and `row_indicators[col][i]` is the top of the i'th row
+    """
     COLUMN_HISTOGRAM_THRESHOLD = 15
     ROW_HISTOGRAM_THRESHOLD = 50
     ROW_PROXIMITY_THRESHOLD = 10

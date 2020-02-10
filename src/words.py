@@ -2,6 +2,7 @@ import operator
 import re
 import sys
 from math import ceil
+from typing import TextIO, List, Tuple
 
 from dtaidistance import dtw
 from lines import draw_lines
@@ -60,6 +61,12 @@ def delete_punctuation(line_image):
 
 
 def calimero_pro_edition(bin_image, size_threshold=25):
+    """
+    Deletes black connected components lower than `size_threshold` on a binarized image
+    :param bin_image: binarized input image
+    :param size_threshold: connected components with area (no. of black pixels) strictly lower than this threshold are deleted
+    :return: binarized image with CC's with area lower than `size_threshold` deleted
+    """
     num_components, labels, stats, _ = cv2.connectedComponentsWithStats(bin_image, connectivity=8)
     sizes = stats[:, cv2.CC_STAT_AREA]
     for i in range(1, num_components):
@@ -69,7 +76,17 @@ def calimero_pro_edition(bin_image, size_threshold=25):
     return bin_image
 
 
-def segment_words_in_page(image_path, transcription_file):
+def segment_words_in_page(image_path: str, transcription_file: TextIO) -> Tuple[List[Tuple[int, int]], List[List[int]], List[List[List[int]]]]:
+    """
+    Segments words in a page by doing some preprocessing (see: `calimero_pro_edition` and `delete_punctuation`) and then
+    calling `segment_words`
+    :param image_path: Path to page image
+    :param transcription_file: File with row-by-row transcription
+    :return: a triplet `(column_indicators, rows_indicators, page_runs)` where:
+     * `column_indicators` (list) contains x-axis coordinates of columns (see: `detect_lines`)
+     * `row_indicators` (list of lists) contains a list of y-axis lists of coordinates (one list for each column) (see: `detect_lines`)
+     * `page_runs` (list) contains a list of per-row x-coordinates of lines where to draw word separators (`page_runs[col][row]` is the actual list of runs)
+    """
     def get_regex_for_column(page_number, column_number):
         if column_number == 0:
             return f"_P{page_number}_C0\n(.*)_P{page_number}_C1"
@@ -102,7 +119,13 @@ def segment_words_in_page(image_path, transcription_file):
     return columns_indicators, rows_indicators, page_runs
 
 
-def expected_word_lengths_for_line(line_text):
+def expected_word_lengths_for_line(line_text: str) -> List[List[int]]:
+    """
+    Computes all the possible words lengths for a line transcription (there may be multiple alternatives due to abbreviations,
+    e.g. "et" -> "e", "quod" -> "q;", "dominus" -> "dms", etc.)
+    :param line_text: (string) Line transcription
+    :return: a list of all possible expected word lengths
+    """
     words = line_text.lower().strip("\n =").split(" ")
     expected_lengths_line = [[]]
 
@@ -118,13 +141,19 @@ def expected_word_lengths_for_line(line_text):
     return expected_lengths_line
 
 
-def expected_runs_for_line(line_length_combinations):
+def expected_runs_for_line(line_length_combinations: List[List[int]]) -> List[List[int]]:
+    """
+    For each word length combinations of a line outputs an histogram that has non-zero values only where a word cut can be made.
+    :param line_length_combinations: A list of possible word lengths for a line of text
+    :return: An "histogram" that contains a "spike" whenever a word cut can be made
+    """
+    WORD_CUT_SPIKE = 15
     runs_combinations = []
     for line_length in line_length_combinations:
-        runs = [15]
+        runs = [WORD_CUT_SPIKE]
         for run_length in line_length:
             runs += [0] * (run_length + 1)
-            runs += [15]
+            runs += [WORD_CUT_SPIKE]
             runs += [0]
 
         runs.pop()
@@ -133,8 +162,16 @@ def expected_runs_for_line(line_length_combinations):
     return runs_combinations
 
 
-def filter_cuts(shifted_observed_runs, expected_runs):
-
+def filter_cuts(shifted_observed_runs: List[int], expected_runs: List[int]) -> Tuple[List[int], List[int], int]:
+    """
+    Applies dynamic time warping to select cuts in the observed pixel sequence of whitespace runs according to the expected runs
+    :param shifted_observed_runs: histogram of whitespace runs encoded as follows: position = start of run, value = length of run
+    :param expected_runs: histogram of expected word cuts (see: `expected_runs_for_line`)
+    :return: A triplet `(cuts, cuts_indices, distance)` where:
+    * cuts: list of x-coordinates of word cuts
+    * cuts_indices: indices of selected cuts
+    * distance: DTW distance between the two input sequences
+    """
     path = dtw.warping_path(expected_runs, shifted_observed_runs)
     distance = dtw.distance(expected_runs, shifted_observed_runs)
 
