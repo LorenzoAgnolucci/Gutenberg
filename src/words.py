@@ -1,5 +1,6 @@
 import operator
 import re
+import sys
 from math import ceil
 
 from dtaidistance import dtw
@@ -148,9 +149,9 @@ def filter_cuts(shifted_observed_runs, expected_runs):
             cuts.append(j)
             index_found = j in runs_indices
             if not index_found:
-                raise RuntimeError(f"DTW associated expected peak in {i} to zero value in {j}")
-
-            cuts_indices.append(runs_indices.index(j))
+                print(f"DTW associated expected peak in {i} to zero value in {j}", file=sys.stderr)
+            else:
+                cuts_indices.append(runs_indices.index(j))
 
     return cuts, cuts_indices, distance
 
