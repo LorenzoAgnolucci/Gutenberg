@@ -219,7 +219,7 @@ def modify_runs_with_periods(periods_coords, observed_runs):
     for coordinate in coordinates:
         found = False
         offset = 0
-        while not found:
+        while 0 < coordinate + offset < len(coordinates) and not found:
             if observed_runs[coordinate + offset] != 0:
                 found = True
             else:
@@ -227,7 +227,10 @@ def modify_runs_with_periods(periods_coords, observed_runs):
                     offset = abs(offset) + 1  # poteva piovere
                 else:
                     offset *= -1
-        observed_runs[coordinate + offset] *= 2
+
+        if 0 < coordinate + offset < len(coordinates):
+            observed_runs[coordinate + offset] *= 2
+
     return observed_runs
 
 
