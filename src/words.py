@@ -128,6 +128,8 @@ def expected_runs_for_line(line_length_combinations):
             runs += [0] * (run_length + 1)
             runs += [15]
             runs += [0]
+
+        runs.pop()
         runs_combinations.append(runs)
 
     return runs_combinations
