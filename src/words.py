@@ -41,7 +41,7 @@ ALTERNATIVES_LENGTH_MAPPING = {
 }
 
 
-def delete_punctuation(line_image, output_path):
+def delete_punctuation(line_image):
     h, w = line_image.shape[:2]
 
     bin_image = binarize_image(line_image)
@@ -59,9 +59,7 @@ def delete_punctuation(line_image, output_path):
     return bin_image
 
 
-def calimero_pro_edition(bin_image, output_path, size_threshold=25):
-    # output_path.mkdir(parents=True, exist_ok=True)
-
+def calimero_pro_edition(bin_image, size_threshold=25):
     num_components, labels, stats, _ = cv2.connectedComponentsWithStats(bin_image, connectivity=8)
     sizes = stats[:, cv2.CC_STAT_AREA]
     for i in range(1, num_components):
@@ -71,7 +69,7 @@ def calimero_pro_edition(bin_image, output_path, size_threshold=25):
     return bin_image
 
 
-def segment_words_in_page(image_path, output_path, transcription_file):
+def segment_words_in_page(image_path, transcription_file):
     def get_regex_for_column(page_number, column_number):
         if column_number == 0:
             return f"_P{page_number}_C0\n(.*)_P{page_number}_C1"
@@ -94,8 +92,8 @@ def segment_words_in_page(image_path, output_path, transcription_file):
         for row_index, (row_top, row_bottom) in enumerate(zip(rows_separators, rows_separators[1:])):
             row_text = column_text[row_index]
             line_image = image_data[row_top:row_bottom, column_left:column_right]
-            line_without_punctuation = delete_punctuation(line_image, None)
-            calimered_binarized_image = calimero_pro_edition(line_without_punctuation, None)
+            line_without_punctuation = delete_punctuation(line_image)
+            calimered_binarized_image = calimero_pro_edition(line_without_punctuation)
             runs = segment_words(calimered_binarized_image, line_image, row_text, page_number, column_index, row_index)
             column_runs.append(runs)
 
@@ -293,7 +291,7 @@ def segment_words(calimered_line_image, line_image, line_text, page, col, row):
 def draw_word_separators_in_page(image_path, output_path, transcription_file):
     image_output_path = os.path.join(output_path, os.path.basename(image_path))
 
-    columns_indicators, rows_indicators, page_runs = segment_words_in_page(image_path, None, transcription_file)
+    columns_indicators, rows_indicators, page_runs = segment_words_in_page(image_path, transcription_file)
     draw_lines(columns_indicators, rows_indicators, image_path, output_path)
     image_data = cv2.imread(image_output_path)
 
