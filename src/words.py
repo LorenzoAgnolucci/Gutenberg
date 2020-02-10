@@ -123,10 +123,10 @@ def expected_word_lengths_for_line(line_text):
 def expected_runs_for_line(line_length_combinations):
     runs_combinations = []
     for line_length in line_length_combinations:
-        runs = [20]
+        runs = [15]
         for run_length in line_length:
             runs += [0] * (run_length + 1)
-            runs += [20]
+            runs += [15]
             runs += [0]
         runs_combinations.append(runs)
 
