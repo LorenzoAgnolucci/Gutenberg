@@ -302,7 +302,8 @@ def draw_word_separators_in_page(image_path, output_path, transcription_file):
         for row_index, (row_top, row_bottom) in enumerate(zip(rows_separators, rows_separators[1:])):
             row_runs = page_runs[column_index][row_index]
 
-            for end in row_runs:
+            cv2.putText(image_data, f"{row_index}", (column_left - 15, (row_top + row_bottom) // 2), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (238, 0, 255), 1, cv2.LINE_AA)
+            for i, end in enumerate(row_runs):
                 cv2.line(image_data, (column_left + end, row_top), (column_left + end, row_bottom), (0, 0, 255),
                          1)
 
