@@ -1,3 +1,4 @@
+import operator
 import os
 import pathlib
 
@@ -46,8 +47,8 @@ def detect_lines(image_path):
         column_widths[(column_index, column_index + 1)] = abs(
             columns_indicators[column_index] - columns_indicators[column_index + 1])
 
-    (first_left, first_right), (second_left, second_right) = list(
-        sorted(column_widths, key=column_widths.get, reverse=True))[:2]
+    (first_left, first_right), (second_left, second_right) = sorted(list(
+        sorted(column_widths, key=column_widths.get, reverse=True))[:2], key=operator.itemgetter(0))
     columns_indicators[first_right] += COLUMN_EXTRA_MARGIN
     columns_indicators[second_right] += COLUMN_EXTRA_MARGIN
 
