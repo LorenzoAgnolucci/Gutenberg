@@ -184,6 +184,9 @@ def collapse_histogram(histogram):
     if histogram[-1] == 1:
         new_histogram[-count + 1] = count
 
+    while new_histogram[:][-1] == 0:
+        del new_histogram[-1]
+
     return new_histogram
 
 
