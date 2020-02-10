@@ -111,11 +111,11 @@ def expected_word_lengths_for_line(line_text):
     for word in words:
         if word in ALTERNATIVES_LENGTH_MAPPING:
             for line_length in expected_lengths_line[:]:
-                expected_lengths_line.append(line_length + [sum([LETTER_LENGTH_MAPPING[x] for x in word])])
+                expected_lengths_line.append(line_length + [sum([LETTER_LENGTH_MAPPING[x] - 1 for x in word])])
                 line_length.append(ALTERNATIVES_LENGTH_MAPPING[word])
         else:
             for line_length in expected_lengths_line:
-                line_length.append(sum([LETTER_LENGTH_MAPPING[x] for x in word]))
+                line_length.append(sum([LETTER_LENGTH_MAPPING[x] - 1 for x in word]))
 
     return expected_lengths_line
 
