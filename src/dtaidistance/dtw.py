@@ -139,7 +139,7 @@ def distance(s1, s2, window=None, max_dist=None,
         if psi != 0 and j_start == 0 and i < psi:
             dtw[i1, 0] = 0
         for j in range(j_start, j_end):
-            d = abs(s1[i] - s2[j])
+            d = (s1[i] - s2[j])**2
             if d > max_step:
                 continue
             assert j + 1 - skip >= 0
@@ -280,7 +280,7 @@ def warping_paths(s1, s2, window=None, max_dist=None,
         #                                                y)
         for j in range(max(0, i - max(0, r - c) - window + 1), min(c, i + max(0, c - r) + window)):
             # print('j =', j, 'max=',min(c, c - r + i + window))
-            d = abs(s1[i] - s2[j])
+            d = (s1[i] - s2[j])**2
             if max_step is not None and d > max_step:
                 continue
             # print(i, j + 1 - skip, j - skipp, j + 1 - skipp, j - skip)
