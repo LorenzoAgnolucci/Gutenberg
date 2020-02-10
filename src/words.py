@@ -234,14 +234,36 @@ def modify_runs_with_periods(periods_coords, observed_runs):
     return observed_runs
 
 
+def rescale_expected_runs(expected_runs, observed_runs):
+    """
+    :param expected_runs:
+    :param observed_runs:
+    :return: expected runs with the same length as observed_runs, where all nonzero entries are shifted according to the
+    ratio of their respective lengths
+    """
+    scale_factor = len(observed_runs) / len(expected_runs)
+
+    spikes_indices = [i for i, x in enumerate(expected_runs) if x != 0]
+
+    scaled_expected_runs = [0] * len(observed_runs)
+
+    for i in spikes_indices:
+        scaled_expected_runs[int(i * scale_factor)] = expected_runs[i]
+
+    return scaled_expected_runs
+
+
 def segment_words(calimered_line_image, line_image, line_text, page, col, row):
     COLUMN_HISTOGRAM_THRESHOLD = 2
     height, width = calimered_line_image.shape[:2]
     line_histogram = cv2.reduce(calimered_line_image, 0, cv2.REDUCE_SUM, dtype=cv2.CV_32F).reshape(-1) / 255
     line_histogram = [0 if x > COLUMN_HISTOGRAM_THRESHOLD else 1 for x in line_histogram]
     expected_runs_combinations = expected_runs_for_line(expected_word_lengths_for_line(line_text))
+    expected_cuts = len(line_text.strip(" \n=").split(" ")) + 2
 
     observed_runs = collapse_histogram(line_histogram)
+    noise_threshold = min(list(sorted([x for x in observed_runs if x != 0], reverse=True))[:expected_cuts])
+    observed_runs = [x if x >= noise_threshold else 0 for x in observed_runs]
 
     long_accents_coords = find_long_accents_in_line(line_image, 0, 0, width, height)
 
@@ -254,8 +276,8 @@ def segment_words(calimered_line_image, line_image, line_text, page, col, row):
     cuts_combinations = []
     observed_runs_shifted = compute_shifted_runs(long_accents_coords, observed_runs)
 
-    for expected_runs in expected_runs_combinations:
-        expected_runs += [0] * (len(observed_runs) - len(expected_runs))
+    for i, expected_runs in enumerate(expected_runs_combinations):
+        expected_runs_combinations[i] = rescale_expected_runs(expected_runs, observed_runs)
         cuts_combinations.append(filter_cuts(observed_runs_shifted, expected_runs))
 
     best_cuts, best_cuts_indices, best_distance = min(cuts_combinations, key=operator.itemgetter(2))
