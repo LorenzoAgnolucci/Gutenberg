@@ -76,6 +76,50 @@ def calimero_pro_edition(bin_image, size_threshold=25):
     return bin_image
 
 
+def delete_colored_components(image_data):
+    hsv_img = cv2.cvtColor(image_data, cv2.COLOR_BGR2HSV)
+
+    lower_red = np.array([0, 80, 100])
+    upper_red = np.array([20, 255, 255])
+
+    lower_blue = np.array([60, 20, 20])
+    upper_blue = np.array([170, 255, 255])
+
+    red_mask = cv2.inRange(hsv_img, lower_red, upper_red)
+    blue_mask = cv2.inRange(hsv_img, lower_blue, upper_blue)
+
+    red_channel = cv2.bitwise_and(image_data, image_data, mask=red_mask)
+    blue_channel = cv2.bitwise_and(image_data, image_data, mask=blue_mask)
+
+    red_channel = cv2.cvtColor(cv2.cvtColor(red_channel, cv2.COLOR_HSV2BGR), cv2.COLOR_BGR2GRAY)
+    blue_channel = cv2.cvtColor(cv2.cvtColor(blue_channel, cv2.COLOR_HSV2BGR), cv2.COLOR_BGR2GRAY)
+
+    _, red_binarized_channel = cv2.threshold(red_channel, 10, 255, cv2.THRESH_BINARY)
+    _, blue_binarized_channel = cv2.threshold(blue_channel, 10, 255, cv2.THRESH_BINARY)
+
+    num_components, labels, stats, _ = cv2.connectedComponentsWithStats(red_binarized_channel, connectivity=8)
+    for label in range(1, num_components):
+        area = stats[label, cv2.CC_STAT_AREA]
+
+        if area >= 20:
+            image_data[labels == label] = 255
+
+    num_components, labels, stats, _ = cv2.connectedComponentsWithStats(blue_binarized_channel, connectivity=8)
+    for label in range(1, num_components):
+        area = stats[label, cv2.CC_STAT_AREA]
+
+        if area >= 20:
+            image_data[labels == label] = 255
+
+    return image_data
+
+
+def get_regex_for_column(page_number, column_number):
+    if column_number == 0:
+        return f"_P{page_number}_C0\n(.*)_P{page_number}_C1"
+    return f"_P{page_number}_C1\n(.*)_P{page_number + 1}_C0"
+
+
 def segment_words_in_page(image_path: str, transcription_file: TextIO) -> Tuple[List[Tuple[int, int]], List[List[int]], List[List[List[int]]]]:
     """
     Segments words in a page by doing some preprocessing (see: `calimero_pro_edition` and `delete_punctuation`) and then
@@ -87,12 +131,9 @@ def segment_words_in_page(image_path: str, transcription_file: TextIO) -> Tuple[
      * `row_indicators` (list of lists) contains a list of y-axis lists of coordinates (one list for each column) (see: `detect_lines`)
      * `page_runs` (list) contains a list of per-row x-coordinates of lines where to draw word separators (`page_runs[col][row]` is the actual list of runs)
     """
-    def get_regex_for_column(page_number, column_number):
-        if column_number == 0:
-            return f"_P{page_number}_C0\n(.*)_P{page_number}_C1"
-        return f"_P{page_number}_C1\n(.*)_P{page_number + 1}_C0"
 
     image_data = cv2.imread(image_path)
+    image_data = delete_colored_components(image_data)
 
     columns_indicators, rows_indicators = detect_lines(image_path)
     page_number = int(os.path.splitext(os.path.basename(image_path))[0])
@@ -109,9 +150,7 @@ def segment_words_in_page(image_path: str, transcription_file: TextIO) -> Tuple[
         for row_index, (row_top, row_bottom) in enumerate(zip(rows_separators, rows_separators[1:])):
             row_text = column_text[row_index]
             line_image = image_data[row_top:row_bottom, column_left:column_right]
-            line_without_punctuation = delete_punctuation(line_image)
-            calimered_binarized_image = calimero_pro_edition(line_without_punctuation)
-            runs = segment_words(calimered_binarized_image, line_image, row_text, page_number, column_index, row_index)
+            runs = segment_words(line_image, row_text, page_number, column_index, row_index)
             column_runs.append(runs)
 
         page_runs.append(column_runs)
@@ -289,8 +328,10 @@ def rescale_expected_runs(expected_runs, observed_runs):
     return scaled_expected_runs
 
 
-def segment_words(calimered_line_image, line_image, line_text, page, col, row):
+def segment_words(line_image, line_text, page, col, row):
     COLUMN_HISTOGRAM_THRESHOLD = 2
+    line_without_punctuation = delete_punctuation(line_image)
+    calimered_line_image = calimero_pro_edition(line_without_punctuation)
     height, width = calimered_line_image.shape[:2]
     line_histogram = cv2.reduce(calimered_line_image, 0, cv2.REDUCE_SUM, dtype=cv2.CV_32F).reshape(-1) / 255
     line_histogram = [0 if x > COLUMN_HISTOGRAM_THRESHOLD else 1 for x in line_histogram]
