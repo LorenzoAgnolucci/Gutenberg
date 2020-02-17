@@ -152,7 +152,7 @@ def get_annotations_in_page(image_path, coco_images_output_path, transcription_f
                 print(f"error page {page_number} column {column_index} row {row_index}")
                 raw_line_image[:, :] = (226, 210, 233)
             else:
-                for annotation_id, (left, right) in enumerate(zip(word_cuts, word_cuts[1:])):
+                for word_index, (left, right) in enumerate(zip(word_cuts, word_cuts[1:])):
                     x, y, width, height = cv2.boundingRect(line_image[:, left:right])
                     top_left = (left + x, (row_top - range_start_top) + y)
                     bottom_left = (left + x, (row_top - range_start_top) + y + height)
@@ -161,9 +161,9 @@ def get_annotations_in_page(image_path, coco_images_output_path, transcription_f
 
                     points = (top_left, bottom_left, bottom_right, top_right)
 
-                    category_id = get_category_id(words[annotation_id])
+                    category_id = get_category_id(words[word_index])
                     annotation = build_word_annotation(points, image_id=chunk_id, category_id=category_id,
-                                                       annotation_id=annotation_id)
+                                                       annotation_id=f"{chunk_id}{word_index}")
                     annotations.append(annotation)
 
             if (dataset_chunk == 6 and row_index != 0) or (dataset_chunk != 6 and row_index == len(list(rows_separators_pairs)) - 1):
@@ -210,23 +210,17 @@ def visualize_annotations(dataset_path, image_path, output_path):
         cv2.imwrite(output_image_path, image)
 
 
-def main():
-    image_path = "../dataset/deskewed/genesis"
-    output_path = pathlib.Path("../dataset/coco/")
-
-    output_path.mkdir(parents=True, exist_ok=True)
-
+def generate_dataset(image_path, output_path, dataset_type, start_page, end_page):
     coco_images_output = []
-
     coco_annotations_output = []
     with open("../dataset/genesis1-20.txt") as transcription_file:
-        for image_file in sorted(os.listdir(image_path))[19:20]:
+        for image_file in sorted(os.listdir(image_path))[start_page:end_page]:
             image_input_path = os.path.join(image_path, image_file)
 
-            coco_image_chunks, coco_annotations = get_annotations_in_page(image_input_path, output_path, transcription_file)
+            coco_image_chunks, coco_annotations = get_annotations_in_page(image_input_path, output_path,
+                                                                          transcription_file)
             coco_images_output += coco_image_chunks
             coco_annotations_output += coco_annotations
-
     coco_output = {
         "info": INFO,
         "licenses": LICENSES,
@@ -234,14 +228,25 @@ def main():
         "annotations": coco_annotations_output,
         "categories": CATEGORIES
     }
+    with open(os.path.join(output_path, f"coco_dataset_{dataset_type}.json"), "w") as f:
+        json.dump(coco_output, f, ensure_ascii=False, indent=4)
 
-    with open(os.path.join(output_path, "coco_dataset2.json"), "w") as f:
-         json.dump(coco_output, f, ensure_ascii=False, indent=4)
+
+
+def main():
+    image_path = "../dataset/deskewed/genesis"
+    output_path = pathlib.Path("../dataset/coco/")
+
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    generate_dataset(image_path, output_path, "train", start_page=1, end_page=28)
+    generate_dataset(image_path, output_path, "validation", start_page=28, end_page=31)
+    generate_dataset(image_path, output_path, "test", start_page=31, end_page=34)
 
 
 if __name__ == '__main__':
-    main()
-    image_path = "../dataset/chunks"
+   # main()
+    image_path = "../dataset/coco"
     output_path = pathlib.Path("../dataset/chunks")
-    dataset_path = pathlib.Path("../dataset/coco/coco_dataset2.json")
+    dataset_path = pathlib.Path("../dataset/coco/coco_dataset_train.json")
     visualize_annotations(dataset_path, image_path, output_path)
