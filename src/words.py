@@ -223,7 +223,7 @@ def collapse_histogram(histogram):
     while new_histogram[:][-1] == 0:
         del new_histogram[-1]
 
-    return new_histogram, start_count - 1
+    return new_histogram, max(start_count - 1, 0)
 
 
 def compute_shifted_runs(long_accents_coords, observed_runs):
