@@ -363,6 +363,9 @@ def segment_words(line_image, line_text, page, col, row):
     runs_indices.insert(0, 0)
     best_cuts = [runs_indices[i] + shift_offset for i in best_cuts_indices]
 
+    if line_text.strip("\n ")[-1] == "=":
+        best_cuts.append(len(line_histogram) - 1)
+
     return best_cuts
 
 
