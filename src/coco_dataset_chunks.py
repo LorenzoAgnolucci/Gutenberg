@@ -74,16 +74,14 @@ def build_word_annotation(points, image_id, category_id, annotation_id):
     height = bottom_left[1] - top_left[1]
     return {
         "segmentation": [
-            [
                 top_left[0],
                 top_left[1],
                 bottom_left[0],
                 bottom_left[1],
                 bottom_right[0],
                 bottom_right[1],
-                bottom_left[0],
-                bottom_right[1]
-            ]
+                top_right[0],
+                top_right[1]
         ],
         "area": width * height,
         "iscrowd": 0,
@@ -166,7 +164,8 @@ def get_annotations_in_page(image_path, coco_images_output_path, transcription_f
                                                        annotation_id=f"{chunk_id}{word_index}")
                     annotations.append(annotation)
 
-            if (dataset_chunk == 6 and row_index != 0) or (dataset_chunk != 6 and row_index == len(list(rows_separators_pairs)) - 1):
+            if (dataset_chunk == 6 and row_index != 0) or (
+                    dataset_chunk != 6 and row_index == len(list(rows_separators_pairs)) - 1):
                 row_range = slice(range_start_top, row_bottom)
                 chunk_image = raw_image_data[row_range, column_left:column_right]
                 image_name = os.path.splitext(os.path.basename(image_path))[0] + f"_{column_index}_{row_index // 7}.jpg"
@@ -232,21 +231,20 @@ def generate_dataset(image_path, output_path, dataset_type, start_page, end_page
         json.dump(coco_output, f, ensure_ascii=False, indent=4)
 
 
-
 def main():
     image_path = "../dataset/deskewed/genesis"
     output_path = pathlib.Path("../dataset/coco/")
 
     output_path.mkdir(parents=True, exist_ok=True)
 
-    generate_dataset(image_path, output_path, "train", start_page=1, end_page=28)
-    generate_dataset(image_path, output_path, "validation", start_page=28, end_page=31)
-    generate_dataset(image_path, output_path, "test", start_page=31, end_page=34)
+    generate_dataset(image_path, output_path, "train1-21", start_page=1, end_page=22)
+    generate_dataset(image_path, output_path, "validation22-27", start_page=22, end_page=28)
+    generate_dataset(image_path, output_path, "test28-33", start_page=28, end_page=34)
 
 
 if __name__ == '__main__':
-   # main()
-    image_path = "../dataset/coco"
-    output_path = pathlib.Path("../dataset/chunks")
-    dataset_path = pathlib.Path("../dataset/coco/coco_dataset_train.json")
-    visualize_annotations(dataset_path, image_path, output_path)
+    main()
+    # image_path = "../dataset/coco"
+    # output_path = pathlib.Path("../dataset/chunks")
+    # dataset_path = pathlib.Path("../dataset/coco/coco_dataset_train_wrong.json")
+    # visualize_annotations(dataset_path, image_path, output_path)

@@ -358,16 +358,16 @@ vero cum quingentorum esset annorum ge=
 nuit Sem et Ham et Iafeth 
 cumque coepissent homines multi=
 plicari super terram et filias pro=
-creassent.videntes filii Dei filias eorum quod 
+creassent. videntes filii Dei filias eorum quod
 essent pulchrae acceperunt uxores sibi ex 
-omnibus quas elegerant.dixitque Deus 
+omnibus quas elegerant. dixitque Deus
 non permanebit spiritus meus in homine 
 inaeternum quia caro est eruntque dies illius
 centumviginti annorum. gigantes autem
 erant super terram in diebus illis postquam enim 
 ingressi sunt filii Dei ad filias hominum 
 illaeque genuerunt isti sunt potentes a saeculo 
-viri famosi.videns autem Deus quod multa 
+viri famosi. videns autem Deus quod multa
 malitia hominum esset in terra et cuncta cogi=
 tatio cordis intenta esset ad malum 
 omni tempore. paenituit eum quod hominem fecisset
@@ -700,7 +700,7 @@ descendamus et confundamus ibi linguam
 eorum ut non audiat unusquisque vocem 
 proximi sui. atque ita divisit eos Dominus 
 ex illo loco in universas terras et cessa=
-verunt aedificare civitatem.et idcirco vo=
+verunt aedificare civitatem. et idcirco vo=
 catum est nomen loci illi Babel quia
 ibi confusum est labium universae terrae et 
 inde dispersit eos Dominus super faciem cunctarum 
@@ -853,7 +853,7 @@ dixitque Dominus ad Abram postquam divisus est
 ab eoLoth leva oculos tuos in directum
 _P10_C0
 et vide a loco in quo nunc es ad aqui=
-lonem et ad meridiem ad orientem et ad oc=
+lonem et meridiem ad orientem et oc=
 cidentem. omnem terram quam conspicis
 tibi dabo et semini tuo usque in sempiter=
 num. faciamque semen tuum sicut pulverem 
@@ -863,7 +863,7 @@ poterit. surge ergo et perambula terram
 in longitudine et in latitudine sua quia 
 tibi daturus sum eam. movens igitur taber=
 naculum suum Abram venit et habitavit
-iuxta convallem Mambre quod est in 
+iuxta convallem Mambre que est in
 Hebron aedificavitque ibi altare Domino 
 factum est autem in illo tempore ut
 Amrafel rex Sennaar et Arioch 
@@ -877,13 +877,13 @@ nes hii convenerunt in vallem Silvestrem
 quae nunc est mare Salis. duodecim enim 
 annis servierant Chodorlahomor et tertio=
 decimo anno recesserunt ab eo. igitur 
-anno quartodecimo venit Chodorlahomor 
+quartodecimo anno venit Chodorlahomor
 et reges qui erant cum eo et percusserunt
 Rafaim in Astharoth et Carnaim et
 Zuzim cum eis et Emim in Save caria=
 thaim. et Chorreos in montibus Seir usque 
 ad campestria Pharan quae est in solitu=
-dine.reversique sunt et venerunt usque ad
+dine. reversique sunt et venerunt usque ad
 fontem Mesfat ipsa est Cades et percusserunt 
 omnem regionem Amalechitarum et Amor=
 reorum qui habitabat in Asasonthamar.
@@ -927,7 +927,7 @@ enim sacerdos Dei altissimi. benedixit ei
 et ait benedictus Abram Deo excelso 
 qui creavit caelum et terram et benedictus Deus
 excelsus quo protegente hostes in mani=
-bus tuis sunt et dedit ei decimas 
+bus tuis tradiri sunt et dedit ei decimas
 ex omnibus. dixit autem rex Sodomorum 
 ad Abram da mihi animas cetera 
 tolle tibi. qui respondit ei levo manum 
@@ -943,7 +943,7 @@ partes suas
 his itaque transactis factus est ser=
 mo Domini ad Abram per visionem dicens
 noli timere Abram ego protector tuus
-sum et merces tua magna nimis. dixitque 
+et merces tua magna nimis. dixitque
 Abram Domine Deus quid dabis mihi 
 ego vadam absque liberis et filius pro=
 curatoris domus meae iste Damascus 
@@ -955,7 +955,7 @@ heres tuus sed qui egredietur de utero tuo
 ipsum habebis heredem. eduxitque eum foras
 et ait illi suspice caelum et numera stellas 
 si potes et dixit ei sic erit semen tuum. 
-credidit Domino et reputatum est illi
+credidit Abram Domino et reputatum est illi
 ad iustitiam. dixitque ad eum ego Dominus qui 
 eduxi te de Ur Chaldeorum ut darem tibi 
 terram istam et possideres eam. at ille ait 
@@ -979,7 +979,7 @@ et post haec egredientur cum magna sub=
 stantia. tu autem ibis ad patres tuos in 
 pace sepultus in senectute bona. gene=
 ratione autem quarta revertentur huc 
-necdum enim conpletae sunt iniquitates
+nec dum enim conpletae sunt iniquitates
 _P11_C1
 Amorreorum usque ad praesens tempus. cum 
 ergo occubuisset sol facta est caligo te=
@@ -988,7 +988,7 @@ et lampas ignis transiens inter divi=
 siones illas. in die illo pepigit Dominus 
 foedus cum Abram dicens semini tuo dabo
 terram hanc a fluvio Aegypti usque ad flu=
-vium magnum flumen Eufraten. Cineos et Cene=
+vium magnum Eufraten. Cineos et Cene=
 zeos Cerhimoneos et Hettheos et Ferezeos
 Rafaim quoque et Amorreos et Chananeos
 et Gergeseos et Iebuseos
@@ -1124,7 +1124,7 @@ tur cor vestrum postea transibitis idcirco
 enim declinastis ad servum vestrum qui di=
 xerunt fac ut locutus es. festinavit 
 Abraham in tabernaculum ad Sarram 
-dixitque ei adcelera tria sata similae co=
+dixitque ei adcelera tria sata similae com=
 misce et fac subcinericios panes. ipse
 vero ad armentum cucurrit et tulit inde 
 vitulum tenerrimum et optimum deditque pu=
@@ -1138,8 +1138,8 @@ tens veniam ad te tempore isto vita comi=
 te et habebit filium Sarra uxor tua quo 
 audito Sarra risit post ostium tabernaculi. 
 erant autem ambo senes provectaeque aetatis 
-et desierant Sarrae fieri muliebria. quae ri=
-sit occulte dicens postquam consenui et dominus 
+et desierant Sarrae fieri muliebria. quae risit
+occulte dicens postquam consenui et dominus
 meus vetulus est voluptati operam dabo. 
 dixit autem Dominus ad Abraham quare 
 risit Sarra uxor tua dicens num vere
@@ -1239,7 +1239,7 @@ citate a minimo usque ad maximum
 ita ut ostium invenire non possent. di=
 xerunt autem ad Loth habes hic quempiam
 _P14_C1
-tuorum quempiam generum aut filias. Om=
+tuorum generum aut filios aut filias. Om=
 nes qui tui sunt educ de urbe hac. de=
 lebimus enim locum istum eo quod increverit
 clamor eorum coram Domino qui misit nos 
@@ -1309,7 +1309,7 @@ surrexit. altera quoque die dixit maior ad
 minorem ecce dormivi heri cum patre meo 
 demus ei bibere vinum etiam hac nocte et dor=
 mies cum eo ut salvemus semen de patre 
-nostro. dederunt etiam et illa nocte patri
+meo. dederunt etiam et illa nocte patri
 suo bibere vinum ingressaque minor fi=
 lia dormivit cum eo et nec quidem tunc
 sensit quando concubuerit vel quando illa
@@ -1345,7 +1345,7 @@ et omnia quae tua sunt. statimque denocte
 consurgens Abimelech vocavit omnes 
 servos suos et locutus est universa verba 
 haec in auribus eorum timueruntque omnes 
-viri valde.vocavit autem Abimelech 
+viri valde. vocavit autem Abimelech
 etiam Abraham et dixit ei quid fecisti 
 nobis quid peccavimus in te quia in=
 duxisti super me et super regnum meum peccatum
@@ -1434,8 +1434,8 @@ feci tibi facies mihi et terrae in qua versatus
 es advena. dixitque Abraham ego iu=
 rabo. et increpavit Abimelech propter 
 puteum aquae quem vi abstulerant servi eius.
-respondit Abimelech nescivi quis fe=
-cerit hanc rem sed et tu non indicasti mihi 
+respondit Abimelech nescivi quis fece=
+rit hanc rem sed et tu non indicasti mihi
 et ego non audivi praeter hodie. tulit ita=
 que Abraham oves et boves et dedit 
 Abimelech percusseruntque ambo foedus. 
@@ -2449,14 +2449,14 @@ meus quod coram te adsurgere nequeo quia
 iuxta consuetudinem feminarum nunc accidit
 mihi sic delusa sollicitudo quaerentis e=
 st tumensque Iacob cum iurgio a=
-it quamobculpam meam et ob quod peccatum meo
-sic exarsisti post me et scrutatus es
-omnem supellectilem meam quid invenisti
-de cuncta substantia domus tuae
-pone hic coram fratribus meis et fratribus
-tuis et iudicent inter me et te idcirco
-viginti annis fui tecum oves tuae et cap=
-rae steriles non fuerunt arietes gregis tui non
+it quamobculpam meam et ob quod peccatum meo sic
+exarsisti post me et scrutatus es omnem
+supellectilem meam quid invenisti de
+cuncta substantia domus tuae pone
+hic coram fratribus meis et fratribus tuis
+et iudicent inter me et te idcirco viginti
+annis fui tecum oves tuae et caprae steri=
+les non fuerunt arietes gregis tui non
 comedi nec captum a bestia ostendi tibi
 ego damnum omne reddebam quicquid
 furto perierat a me exigebas die noctuque
@@ -2790,17 +2790,17 @@ _P32_C1
 cumque habitaret in illa regione abiit
 Ruben et dormivit cum Bala concubina
 patris sui quod illum minime latuit
-erant autem filii Iacob duodecim
-filii Liae primogenitus Ruben et
-Symeon et Levi et Iudas et Isachar
-et Zabulon filii Rahel Ioseph et
-Beniamin filii Balae ancillae Rahelis Dan
-et Nepthalim filii Zelphae ancillae Liae Gad
-et Aser hii sunt filii Iacob qui na=
-ti sunt ei in Mesopotamiam Syriae ve=
-nit etiam ad Isaac patrem suum
-in Mambre civitatem Arbee haec est Hebron i=
-n qua peregrinatus est Abraham et Isaac et conpleti sunt dies
+erant autem filii Iacob duodecim filii
+Liae primogenitus Ruben et Symeon et
+Levi Iudas et Isachar et Zabulon filii
+Rahel Ioseph et Beniamin filii Balae
+ancillae Rahelis Dan et Nepthalim filii
+Zelphae ancillae Liae Gad et Aser hii sunt
+filii Iacob qui nati sunt ei in Mesopo=
+tamiam Syriae venit etiam ad Isaac pa=
+trem suum in Mambre civitatem Arbee
+haec est Hebron in qua peregrinatus est Abra=
+ham et Isaac et conpleti sunt dies
 Isaac centumoctoginta annorum consumptusque
 aetate mortuus est et adpositus est populo suo
 senex et plenus dierum et sepelierunt eum

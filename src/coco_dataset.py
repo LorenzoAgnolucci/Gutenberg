@@ -74,16 +74,14 @@ def build_word_annotation(points, image_id, category_id, annotation_id):
     height = bottom_left[1] - top_left[1]
     return {
         "segmentation": [
-            [
                 top_left[0],
                 top_left[1],
                 bottom_left[0],
                 bottom_left[1],
                 bottom_right[0],
                 bottom_right[1],
-                bottom_left[0],
-                bottom_right[1]
-            ]
+                top_right[0],
+                top_right[1]
         ],
         "area": width * height,
         "iscrowd": 0,
@@ -187,18 +185,11 @@ def visualize_annotations(dataset_path, image_path, output_path):
         output_image_path = os.path.join(output_path, str(page_number) + ".jpg")
         cv2.imwrite(output_image_path, image)
 
-
-def main():
-    image_path = "../dataset/deskewed/genesis"
-    output_path = pathlib.Path("../dataset/coco/")
-
-    output_path.mkdir(parents=True, exist_ok=True)
-
+def generate_dataset(image_path, output_path, dataset_type, start_page, end_page):
     coco_images_output = []
-
     coco_annotations_output = []
     with open("../dataset/genesis1-20.txt") as transcription_file:
-        for image_file in sorted(os.listdir(image_path))[9:10]:
+        for image_file in sorted(os.listdir(image_path))[start_page:end_page]:
             image_input_path = os.path.join(image_path, image_file)
 
             image = cv2.imread(image_input_path)
@@ -215,7 +206,6 @@ def main():
 
             coco_annotations = get_annotations_in_page(image_input_path, output_path, transcription_file)
             coco_annotations_output += coco_annotations
-
     coco_output = {
         "info": INFO,
         "licenses": LICENSES,
@@ -223,14 +213,26 @@ def main():
         "annotations": coco_annotations_output,
         "categories": CATEGORIES
     }
-
-    with open(os.path.join(output_path, "coco_dataset.json"), "w") as f:
+    with open(os.path.join(output_path, f"coco_dataset_{dataset_type}.json"), "w") as f:
         json.dump(coco_output, f, ensure_ascii=False, indent=4)
+
+def main():
+    image_path = "../dataset/deskewed/genesis"
+    output_path = pathlib.Path("../dataset/coco_fullpage/")
+
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    generate_dataset(image_path, output_path, "train1-21", start_page=1, end_page=30)
+    generate_dataset(image_path, output_path, "validation22-27", start_page=22, end_page=28)
+    generate_dataset(image_path, output_path, "test28-33", start_page=28, end_page=34)
+
+
+
 
 
 if __name__ == '__main__':
     main()
-    image_path = "../dataset/deskewed/genesis"
-    output_path = pathlib.Path("../dataset/coco")
-    dataset_path = pathlib.Path("../dataset/coco/coco_dataset.json")
-    visualize_annotations(dataset_path, image_path, output_path)
+    #image_path = "../dataset/deskewed/genesis"
+    #output_path = pathlib.Path("../dataset/coco_fullpage")
+    #dataset_path = pathlib.Path("../dataset/coco_fullpage/coco_dataset_train.json")
+    #visualize_annotations(dataset_path, image_path, output_path)
