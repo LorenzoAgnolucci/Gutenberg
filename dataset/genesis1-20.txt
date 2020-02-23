@@ -124,17 +124,17 @@ et mali ne comedas in quocumque enim
 _P1_C1
 die comederis ex eo morte morieris 
 dixit quoque Dominus Deus non est bonum hominem
-esse solum faciamus ei adiutorium similem sui 
+esse solum faciamus ei adiutorium similem sibi 
 formatis igitur Dominus Deus de humo cun=
-ctis animantibus terrae et universis vola=
-tilibus caeli adduxit ea ad Adam ut videret 
+ctis animantibus terrae et universis volati=
+libus caeli adduxit ea ad Adam ut videret 
 quid vocaret ea omne enim quod vocavit 
 Adam animae viventis ipsum est nomen 
 eius appellavitque Adam nominibus suis 
 cuncta animantia et universa volatilia 
 caeli et omnes bestias terrae Adam vero non 
-inveniebatur adiutor similis eius inmisit 
-ergo Dominus Deus soporem in Adam cumque 
+inveniebatur adiutor similis eius inmisit= 
+que Dominus Deus soporem in Adam cumque 
 obdormisset tulit unam de costis eius 
 et replevit carnem pro ea. et aedificavit 
 Dominus Deus costam quam tulerat de Adam 
@@ -211,7 +211,7 @@ tunicas pellicias et induit eos. et ait
 ecce Adam quasi unus ex nobis factus
 est sciens bonum et malum nunc ergo ne
 forte mittat manum suam et sumat etiam 
-de ligno vitae et comedat et vivat in 
+de ligno vitae et comedat et vivat in= 
 aeternum. emisit eum Dominus Deus de paradiso 
 voluptatis ut operaretur terram de qua 
 sumptus est. eiecitque Adam et conlocavit 
@@ -271,8 +271,8 @@ uxores nomen uni Ada et nomen alteri
 Sella. genuitque Ada Iabel qui fuit pa=
 ter habitantium in tentoriis atque pastorum. 
 et nomen fratris eius Iubal ipse fuit 
-pater canentium cithara et organo. Sel=
-la quoque genuit Thubalcain qui fuit 
+pater canentium cithara et organo. Se=
+lla quoque genuit Thubalcain qui fuit 
 malleator et faber in cuncta opera aeris et 
 ferri soror vero Thubalcain Noemma. 
 dixitque Lamech uxoribus suis Adae et 
@@ -300,9 +300,9 @@ eius Seth. et facti sunt dies Adam postquam
 genuit Seth octingenti anni genuitque 
 filios et filias. et factum est omne tempus 
 quod vixit Adam anni nongentitriginta
-et mortuus est. vixit quoque Seth centum 
+et mortuus est. vixit quoque Seth centum= 
 quinque annos et genuit Enos. vixitque 
-Seth postquam genuit Enos octingentis 
+Seth postquam genuit Enos octingentis= 
 septem annis genuitque filios et filias.
 et facti sunt omnes dies Seth nongen=
 torumduodecim annorum et mortuus est. vixit
@@ -327,7 +327,7 @@ est. vixitque Iared centumsexagintaduobus
 annis et genuit Enoch. et vixit Iared 
 postquam genuit Enoch octingentos annos 
 et genuit filios et filias. et facti sunt 
-omnes dies Iared nongentisexaginta
+omnes dies Iared nongentisexaginta=
 duo anni et mortuus est. porro Enoch 
 vixit sexaginta quinque annis et genuit 
 Mathusalam. et ambulavit Enoch cum 
@@ -382,7 +382,7 @@ _P4_C1
 iustus atque perfectus fuit in generationibus 
 suis cum Deo ambulavit. et genuit tres 
 filios Sem Ham et Iafeth. corrupta 
-est autem terra coram Deo et repleta est ini=
+est autem terra coram Deo et repleta est ini
 quitate. cumque vidisset Deus terram esse 
 corruptam omnis quippe caro corruperat 
 viam suam super terram. dixit ad Noe finis 
@@ -453,8 +453,8 @@ eius cum eis in arcam. ipsi et omne animal
 secundum genus suum universaque iumenta 
 in genus suum et omne quod movetur super 
 terram in genere suo cunctumque volati=
-le secundum genus suum universae aves o=
-mnesque volucres. ingressae sunt ad Noe in 
+le secundum genus suum universae aves om=
+nesque volucres. ingressae sunt ad Noe in 
 arcam bina et bina ex omni carne in 
 qua erat spiritus vitae. et quae ingressa sunt 
 masculus et femina ex omni carne in=
@@ -589,7 +589,7 @@ et videbo illum et recordabor foederis sem=
 piterni quod pactum est inter Deum et omnem
 animam viventem universae carnis quae est 
 super terram. dixitque Deus ad Noe hoc
-erit signum foederis quod constitui inter me 
+est signum foederis quod constitui inter me 
 et omnem carnem super terram. erant ergo
 filii Noe qui egressi sunt de arca Sem 
 Ham et Iafeth porro Ham ipse est
@@ -715,9 +715,9 @@ genuit Sale trecentis tribus annis et
 genuit Eber. vixitque Sale postquam genu=
 it Eber quadringentis tribus annis et 
 genuit filios et filias. vixit autem Eber 
-triginta quattuor annis et genuit Faleg. 
+trigintaquattuor annis et genuit Faleg. 
 et vixit Eber postquam genuit Faleg 
-quadringentis triginta annis et genuit 
+quadringentistriginta annis et genuit 
 filios et filias. vixit quoque Faleg tri=
 ginta annis et genuit Reu. vixitque Fa=
 leg postquam genuit Reu ducentisnovem
@@ -737,14 +737,14 @@ et genuit filios et filias. vixitque Thare
 septuaginta annis et genuit Abram 
 et Nahor et Aran. hae sunt autem gene=
 rationes Thare Thare genuit Abram 
-et Nahor et Aran porro Aran genuit 
+Nahor et Aran porro Aran genuit 
 Loth. mortuusque est Aran ante Thare 
 patrem suum in terra nativitatis suae in Ur 
 Chaldeorum. duxerunt autem Abram et Nahor
 uxores nomen autem uxoris Abram Sarai
 et nomen uxoris Nahor Melcha filia 
 Aran patris Melchae et patris Ieschae. erat 
-autem Sarai sterilis nec habebat liberos. 
+autem Sarai sterilis nec habebat filios. 
 tulit itaque Thare Abram filium suum et 
 Loth filium Aran filium filii sui et Sarai 
 nurum suam uxorem Abram filii sui et eduxit 
@@ -773,8 +773,8 @@ ut irent in terram Chanaan cumque veni=
 ssent in eam. pertransivit Abram terram usque
 ad locum Sychem usque ad convallem
 Inlustrem Chananeus autem tunc erat
-in terra. apparuit autem Dominus Abram
-et dixit ei semini tuo dabo terram hanc 
+in terra. apparuit autem Dominus Abram et
+dixit ei semini tuo dabo terram hanc 
 qui aedificavit ibi altare Domino qui 
 apparuerat ei et invocavit ibi nomen
 eius et inde transgrediens ad montem
