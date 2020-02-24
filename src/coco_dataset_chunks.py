@@ -74,14 +74,14 @@ def build_word_annotation(points, image_id, category_id, annotation_id):
     height = bottom_left[1] - top_left[1]
     return {
         "segmentation": [
-                top_left[0],
-                top_left[1],
-                bottom_left[0],
-                bottom_left[1],
-                bottom_right[0],
-                bottom_right[1],
-                top_right[0],
-                top_right[1]
+            top_left[0],
+            top_left[1],
+            bottom_left[0],
+            bottom_left[1],
+            bottom_right[0],
+            bottom_right[1],
+            top_right[0],
+            top_right[1]
         ],
         "area": width * height,
         "iscrowd": 0,
