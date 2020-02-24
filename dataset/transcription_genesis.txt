@@ -3431,7 +3431,7 @@ tores esse provinciae cui respondimus paci=
 fici sumus nec ullas molimur insidias
 duodecim fratres uno patre geniti sumus
 unus non est super minimus cum patre
-P_40_C0
+_P40_C0
 nero est in terra Chanaan qui ait no=
 bis sic probabo quod pacifici sitis fratrem
 vestrum unum dimittite apud me et ciba=
@@ -3603,7 +3603,7 @@ oppidum primusque Iudas cum fratribus in=
 gressus est ad Ioseph necdum enim de loco
 abierat omnesque ante eum pariter in terra
 corruerunt quibus ille ait cur sic agere
-P42_C0
+_P42_C0
 voluistis an ignoratis quod non sit
 similis mei in augurandi scientia cui
 Iudas quid respondebimus inquit domino
@@ -3986,8 +3986,8 @@ te Ephraim et transferre super caput Ma=
 nasse dixitque ad patrem non ita conve=
 nit pater quia hic est primogenitus pone
 manum dexteram super caput eius qui renu=
-ens ait scio fili mi scio et iste quip=pe
-erit in populos et multiplicabitur sed frater
+ens ait scio fili mi scio et iste quip=
+pe erit in populos et multiplicabitur sed frater
 eius iunior maior illo erit et semen illius
 crescet in gentes benedixitque eis in tempore
 _P46_C1
