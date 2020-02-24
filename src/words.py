@@ -394,7 +394,7 @@ def main():
     image_path = "../dataset/deskewed/genesis"
     output_path = pathlib.Path("../dataset/segmentation/genesis/")
 
-    with open("../dataset/genesis1-20.txt") as transcription_file:
+    with open("../dataset/transcription_genesis.txt") as transcription_file:
         for image in sorted(os.listdir(image_path))[1:20]:
             image_input_path = os.path.join(image_path, image)
             draw_word_separators_in_page(image_input_path, output_path, transcription_file)

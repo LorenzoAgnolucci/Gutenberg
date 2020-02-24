@@ -109,7 +109,7 @@ def calimerize_line_smart(line_image, line_text):
 
 def get_annotations_in_page(image_path, coco_images_output_path, transcription_file):
     CHUNK_MARGIN_OFFSET = 10
-    CHUNK_SIZE_ROWS = 7
+    CHUNK_SIZE_ROWS = 14
 
     image_data = cv2.imread(image_path)
     raw_image_data = image_data.copy()
@@ -215,7 +215,7 @@ def visualize_annotations(dataset_path, image_path, output_path):
 def generate_dataset(image_path, output_path, dataset_type, start_page, end_page):
     coco_images_output = []
     coco_annotations_output = []
-    with open("../dataset/genesis1-20.txt") as transcription_file:
+    with open("../dataset/transcription_genesis.txt") as transcription_file:
         for image_file in sorted(os.listdir(image_path))[start_page:end_page]:
             image_input_path = os.path.join(image_path, image_file)
 
@@ -236,18 +236,18 @@ def generate_dataset(image_path, output_path, dataset_type, start_page, end_page
 
 def main():
     image_path = "../dataset/deskewed/genesis"
-    output_path = pathlib.Path("../dataset/coco/")
+    output_path = pathlib.Path("../dataset/coco_14/")
 
     output_path.mkdir(parents=True, exist_ok=True)
 
-    generate_dataset(image_path, output_path, "train1-21", start_page=1, end_page=22)
-    generate_dataset(image_path, output_path, "validation22-27", start_page=22, end_page=28)
-    generate_dataset(image_path, output_path, "test28-33", start_page=28, end_page=34)
+    # generate_dataset(image_path, output_path, "train1-28", start_page=1, end_page=29)
+    generate_dataset(image_path, output_path, "validation29-34", start_page=29, end_page=35)
+    generate_dataset(image_path, output_path, "test35-37", start_page=35, end_page=38)
 
 
 if __name__ == '__main__':
     main()
-    # image_path = "../dataset/coco"
-    # output_path = pathlib.Path("../dataset/chunks")
-    # dataset_path = pathlib.Path("../dataset/coco/coco_dataset_train_wrong.json")
-    # visualize_annotations(dataset_path, image_path, output_path)
+    image_path = "../dataset/coco_14"
+    output_path = pathlib.Path("../dataset/coco_14")
+    dataset_path = pathlib.Path("../dataset/coco_14/coco_dataset_train1-28.json")
+    visualize_annotations(dataset_path, image_path, output_path)

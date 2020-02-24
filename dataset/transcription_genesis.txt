@@ -232,8 +232,8 @@ Cain vero et ad munera illius non re=
 spexit iratusque est Cain vehementer et 
 concidit vultus eius. dixitque Dominus ad eum
 quare maestus es et cur concidit facies
-tua. nonne si bene egeris recipies sin
-autem male statim in foribus peccatum 
+tua. nonne si bene egeris recipies sin=
+autem male statim in foribus peccatum tuum
 aderit sed sub te erit appetitus eius et 
 tu dominaberis illius. dixitque Cain ad fratrem
 egrediamur foras cumque essent in agro 
@@ -2915,7 +2915,7 @@ somnium referret fratribus suis quae causa
 maioris odii seminarium fuit dixitque
 Ioseph fratribus suis audite somnium
 meum quod vidi putabam nos colligere
-_P34_C0 
+_P34_C0
 manipulos in agro et quasi consurgere
 manipulum meum et stare vestrosque mani=
 pulos circumstantes adorare manipu=

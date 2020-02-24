@@ -188,7 +188,7 @@ def visualize_annotations(dataset_path, image_path, output_path):
 def generate_dataset(image_path, output_path, dataset_type, start_page, end_page):
     coco_images_output = []
     coco_annotations_output = []
-    with open("../dataset/genesis1-20.txt") as transcription_file:
+    with open("../dataset/transcription_genesis.txt") as transcription_file:
         for image_file in sorted(os.listdir(image_path))[start_page:end_page]:
             image_input_path = os.path.join(image_path, image_file)
 
@@ -222,8 +222,8 @@ def main():
 
     output_path.mkdir(parents=True, exist_ok=True)
 
-    generate_dataset(image_path, output_path, "train1-21", start_page=1, end_page=30)
-    generate_dataset(image_path, output_path, "validation22-27", start_page=22, end_page=28)
+    generate_dataset(image_path, output_path, "train1-34", start_page=1, end_page=35)
+    generate_dataset(image_path, output_path, "validation+test22-27", start_page=22, end_page=28)
     generate_dataset(image_path, output_path, "test28-33", start_page=28, end_page=34)
 
 
