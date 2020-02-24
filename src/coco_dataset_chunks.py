@@ -108,6 +108,8 @@ def calimerize_line_smart(line_image, line_text):
 
 
 def get_annotations_in_page(image_path, coco_images_output_path, transcription_file):
+    CHUNK_SIZE_ROWS = 7
+
     image_data = cv2.imread(image_path)
     raw_image_data = image_data.copy()
     image_data = delete_colored_components(image_data)
@@ -133,8 +135,8 @@ def get_annotations_in_page(image_path, coco_images_output_path, transcription_f
             raw_line_image = raw_image_data[row_top:row_bottom, column_left:column_right]
             row_text = column_text[row_index]
             calimerize_line_smart(line_image, row_text)
-            dataset_chunk = row_index % 7
-            chunk_id = int(f"{page_number}{column_index}{row_index // 7}")
+            dataset_chunk = row_index % CHUNK_SIZE_ROWS
+            chunk_id = int(f"{page_number}{column_index}{row_index // CHUNK_SIZE_ROWS}")
 
             word_cuts = page_runs[column_index][row_index]
             words = row_text.strip(" \n").split()
@@ -164,11 +166,11 @@ def get_annotations_in_page(image_path, coco_images_output_path, transcription_f
                                                        annotation_id=f"{chunk_id}{word_index}")
                     annotations.append(annotation)
 
-            if (dataset_chunk == 6 and row_index != 0) or (
-                    dataset_chunk != 6 and row_index == len(list(rows_separators_pairs)) - 1):
-                row_range = slice(range_start_top, row_bottom)
+            if (dataset_chunk == CHUNK_SIZE_ROWS - 1 and row_index != 0) or (
+                    row_index == len(list(zip(rows_separators, rows_separators[1:]))) - 1):
+                row_range = slice(range_start_top - CHUNK_MARGIN_OFFSET, row_bottom + CHUNK_MARGIN_OFFSET)
                 chunk_image = raw_image_data[row_range, column_left:column_right]
-                image_name = os.path.splitext(os.path.basename(image_path))[0] + f"_{column_index}_{row_index // 7}.jpg"
+                image_name = os.path.splitext(os.path.basename(image_path))[0] + f"_{column_index}_{row_index // CHUNK_SIZE_ROWS}.jpg"
                 image_chunk_output_path = os.path.join(coco_images_output_path, image_name)
                 cv2.imwrite(image_chunk_output_path, chunk_image)
                 dataset_chunks.append({
