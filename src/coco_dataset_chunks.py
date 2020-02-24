@@ -108,6 +108,7 @@ def calimerize_line_smart(line_image, line_text):
 
 
 def get_annotations_in_page(image_path, coco_images_output_path, transcription_file):
+    CHUNK_MARGIN_OFFSET = 10
     CHUNK_SIZE_ROWS = 7
 
     image_data = cv2.imread(image_path)
@@ -154,10 +155,10 @@ def get_annotations_in_page(image_path, coco_images_output_path, transcription_f
             else:
                 for word_index, (left, right) in enumerate(zip(word_cuts, word_cuts[1:])):
                     x, y, width, height = cv2.boundingRect(line_image[:, left:right])
-                    top_left = (left + x, (row_top - range_start_top) + y)
-                    bottom_left = (left + x, (row_top - range_start_top) + y + height)
-                    bottom_right = (left + x + width, (row_top - range_start_top) + y + height)
-                    top_right = (left + x + width, (row_top - range_start_top) + y)
+                    top_left = (left + x, (row_top - range_start_top) + y + CHUNK_MARGIN_OFFSET)
+                    bottom_left = (left + x, (row_top - range_start_top) + y + height + CHUNK_MARGIN_OFFSET)
+                    bottom_right = (left + x + width, (row_top - range_start_top) + y + height + CHUNK_MARGIN_OFFSET)
+                    top_right = (left + x + width, (row_top - range_start_top) + y + CHUNK_MARGIN_OFFSET)
 
                     points = (top_left, bottom_left, bottom_right, top_right)
 
