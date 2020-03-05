@@ -60,6 +60,7 @@ Here's a brief description of each and every file under the ```src/``` directory
 
 * ```preprocessing.py```: Image preprocessing (e.g. skew correction and cropping).
 * ```caput.py```: Caput detection
+* ```punctuation.py```: Punctuation detection (e.g. long accents, periods, ...)
 * ```lines.py```: Line and column segmentation
 * ```words.py```: Word segmentation (requires output from ```lines.py```)
 * ```coco_dataset.py```: [COCO](http://cocodataset.org/)-like dataset building. Requires outpput from ```words.py```
