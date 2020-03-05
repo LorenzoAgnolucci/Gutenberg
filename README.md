@@ -66,3 +66,5 @@ Here's a brief description of each and every file under the ```src/``` directory
 * ```words.py```: Word segmentation (requires output from ```lines.py```)
 * ```coco_dataset.py```: [COCO](http://cocodataset.org/)-like dataset building. Requires outpput from ```words.py```
 * ```coco_dataset_chunks.py```: Variant of ```coco_dataset.py``` where instead of whole pages the images are split in chunks of N lines each (by default N = 7).
+
+The dataset created with the previous steps can be used with the neural network available in the ```WALL_E_Net.ipnyb```
