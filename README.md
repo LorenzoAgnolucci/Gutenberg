@@ -16,6 +16,7 @@
 First we describe the creation of a dataset, containing only the Genesis book, using dynamic programming techniques and projection profiles with the aid of a line-by-line transcription.
 Then we leverage this dataset to train a Mask R-CNN model in order to generalize word segmentation and detection in pages where transcription is not available.
 
+For more information, read the [paper](paper.pdf) located in the repo root.
 
 ### Built With
 
